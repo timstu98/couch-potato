@@ -1,5 +1,7 @@
 #! /usr/bin/env node
 
+// Isn't this just an unfinished  copy of populateDb.js? Can it be deleted?
+
 console.log('This script populates your database. With your specified database as argument');
 
 // Get arguments passed on command line

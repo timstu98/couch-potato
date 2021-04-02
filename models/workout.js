@@ -1,8 +1,8 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var WorkoutSchema = new Schema({
+const WorkoutSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 

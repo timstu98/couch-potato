@@ -1,8 +1,8 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var ExerciseSchema = new Schema({
+const ExerciseSchema = new Schema({
   name: String,
   musclegroup: {
     type: String,

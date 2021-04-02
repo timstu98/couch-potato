@@ -5,7 +5,7 @@ console.log(
 );
 
 // Get arguments passed on command line
-var userArgs = process.argv.slice(2);
+const userArgs = process.argv.slice(2);
 /*
 if (!userArgs[0].startsWith('mongodb')) {
     console.log('ERROR: You need to specify a valid mongodb URL as the first argument');
@@ -16,17 +16,17 @@ if (!userArgs[0].startsWith('mongodb')) {
 const Exercise = require("./models/exercise.js");
 const User = require("./models/user.js");
 const Workout = require("./models/workout");
-var async = require("async");
+const async = require("async");
 
-var mongoose = require("mongoose");
-var mongoDB =
+const mongoose = require("mongoose");
+const mongoDB =
   "mongodb+srv://amelia:cluster44@cluster0.vdpac.mongodb.net/justgowithfit?retryWrites=true&w=majority";
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-var exercises = [];
+let exercises = [];
 
 function createExercise(name, musclegroup, link, difficulty, cb) {
   let exerciseDetail = { name, musclegroup, link, difficulty };
