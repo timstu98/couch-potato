@@ -1,31 +1,33 @@
 const express = require("express");
 require("dotenv").config();
-// const bodyParser = require("body-parser");
-
-const MongoClient = require("mongodb");
-const exercise = require("./models/exercise");
 const mongoose = require("mongoose");
+const endpoints = require("./endpoints");
+const MongoClient = require("mongodb"); // not used because we are using mongoose instead?
+// const bodyParser = require("body-parser"); removed as depreciated
 
 const app = express();
 const port = 3000;
-const URI =
-  "mongodb+srv://amelia:cluster44@cluster0.vdpac.mongodb.net/justGoWithFit?retryWrites=true&w=majority";
-
-mongoose.connect(URI, { useNewUrlParser: true });
+const mongoDB =
+  "mongodb+srv://amelia:cluster44@cluster0.vdpac.mongodb.net/justgowithfit?retryWrites=true&w=majority";
+mongoose.connect(mongoDB, {
+  useNewUrlParser: true,
+  useFindAndModify: true,
+  useUnifiedTopology: true,
+});
 mongoose.Promise = global.Promise;
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-app.use(express.json()); // was bodyparser instead of express
-app.use(express.urlencoded({ extended: false })); // was bodyparser instead of express
+app.use(express.json()); // was bodyParser instead of express, but depreciated
+app.use(express.urlencoded({ extended: false })); // was bodyParser instead of express, but depreciated
 
-let collection;
+endpoints(app);
 
-app.get("/random", (req, res) => {
-  // get an exercise from the db
-  res.send("Here is your random exercise!");
-});
+db.once("open", listen); // make sure connection to DB is open before starting server
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
+function listen() {
+  exerciseCollection = db.collection("exercises");
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+  });
+}
