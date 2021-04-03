@@ -1,4 +1,5 @@
 const ExerciseModel = require("./models/exercise");
+const UsersModel = require("./models/user");
 
 // generating random numbers
 function randNums(numOfEx, lengthOfArray) {
@@ -9,6 +10,22 @@ function randNums(numOfEx, lengthOfArray) {
   }
   return randNums;
 }
+
+// making an auth token? (copied from Irene's notes):
+const JWT_SECRET = "password123";
+const authJWT = (req, res, next) => {
+  const auth = req.headers.authorization;
+  if (auth) {
+    const token = auth.split(" ")[1];
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+      if (err) res.sendStatus(403);
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
+};
 
 module.exports = function (app) {
   // simple get request to test if working:
@@ -70,5 +87,63 @@ module.exports = function (app) {
     } catch (error) {
       res.status(500).send(error);
     }
+  });
+
+  // to login
+  app.post("/login", (req, res) => {
+    const { username, password } = req.body;
+    const user = UsersModel.find(
+      (u) => u.username === username && u.password === password
+    );
+    if (user) {
+      const accessToken = jwt.sign(
+        { username: user.username, role: user.role },
+        JWT_SECRET
+      );
+      res.send({ accessToken });
+    } else {
+      res.send("Username or password incorrect");
+    }
+  });
+
+  // to sign up:
+  app.post("/signup", async (req, res) => {
+    const body = req.body;
+    if (
+      body && // 👈 null and undefined check
+      Object.keys(body).length === 0 &&
+      body.constructor === Object
+    ) {
+      res.send("no body supplied");
+      return;
+    }
+    // get username and password from req.body
+    const { username, password, email } = body;
+    // console.log(body);
+    // does username already exist in DB?
+    const existingUser = await UsersModel.find((u) => {
+      if (u) {
+        return u.username === username;
+      }
+      return false;
+    });
+
+    console.log(existingUser);
+    if (existingUser.length != 0) {
+      res.send("Username already exists, please use new username or login.");
+    } else {
+      // create user in DB
+      let user = new UsersModel({ username, password, email });
+      let output = user.save((err, results) => {
+        if (err) {
+          return err;
+        }
+        console.log(user);
+        return user;
+      });
+      res.send(output);
+    }
+    // create jwt token
+    // send token back
   });
 };
