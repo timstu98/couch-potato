@@ -2,10 +2,11 @@ const express = require("express");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const endpoints = require("./endpoints");
-const MongoClient = require("mongodb"); // not used because we are using mongoose instead?
+// const MongoClient = require("mongodb"); // not used because we are using mongoose instead?
 // const bodyParser = require("body-parser"); removed as depreciated
 
 const app = express();
+
 const port = 3000;
 const mongoDB =
   "mongodb+srv://amelia:cluster44@cluster0.vdpac.mongodb.net/justgowithfit?retryWrites=true&w=majority";
@@ -26,7 +27,6 @@ endpoints(app);
 db.once("open", listen); // make sure connection to DB is open before starting server
 
 function listen() {
-  exerciseCollection = db.collection("exercises");
   app.listen(port, () => {
     console.log(`Listening on port ${port}`);
   });

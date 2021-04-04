@@ -1,5 +1,6 @@
 const ExerciseModel = require("./models/exercise");
 const UsersModel = require("./models/user");
+const jwt = require("jsonwebtoken");
 
 // generating random numbers
 function randNums(numOfEx, lengthOfArray) {
@@ -11,25 +12,40 @@ function randNums(numOfEx, lengthOfArray) {
   return randNums;
 }
 
-// making an auth token? (copied from Irene's notes):
 const JWT_SECRET = "password123";
-const authJWT = (req, res, next) => {
-  const auth = req.headers.authorization;
-  if (auth) {
-    const token = auth.split(" ")[1];
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-      if (err) res.sendStatus(403);
-      req.user = user;
-      next();
-    });
-  } else {
-    res.sendStatus(401);
+
+// Making an auth token? (copied from Irene's notes):
+// const authJWT = (req, res, next) => {
+//   const auth = req.headers.authorization;
+//   if (auth) {
+//     const token = auth.split(" ")[1];
+//     jwt.verify(token, JWT_SECRET, (err, user) => {
+//       if (err) res.sendStatus(403);
+//       req.user = user;
+//       next();
+//     });
+//   } else {
+//     res.sendStatus(401);
+//   }
+// };
+
+function checkForBody(req, res) {
+  // null and undefined check
+  const body = req.body;
+  if (
+    body && // checks body exists
+    Object.keys(body).length === 0 && // checks there is at least one key
+    body.constructor === Object // checks body is an object
+  ) {
+    res.json("No body supplied");
+    return false;
   }
-};
+  return true;
+}
 
 module.exports = function (app) {
   // simple get request to test if working:
-  app.get("/random", async function (req, res) {
+  app.get("/random", async function (_, res) {
     let e = await ExerciseModel.find({});
     let output = e[Math.floor(Math.random() * e.length) + 1];
     try {
@@ -58,9 +74,9 @@ module.exports = function (app) {
 
     // calculating how many exercises to fetch:
     let numOfEx;
-    if ((type = "strength")) {
+    if (type === "strength") {
       numOfEx = time / 5; // time taken per exercise (5 sets, 5 reps, 45sec breaks, based on 3 sec per rep)
-    } else if ((type = "tone")) {
+    } else if (type === "tone") {
       numOfEx = time / 3.5; // time taken per exercise (3 sets, 12 reps, 30sec breaks, based on 3 sec per rep)
       console.log(
         "Type of workout not valid. Please enter 'strength' or 'tone'."
@@ -90,60 +106,42 @@ module.exports = function (app) {
   });
 
   // to login
-  app.post("/login", (req, res) => {
+  app.post("/login", async (req, res) => {
+    if (!checkForBody(req, res)) return;
     const { username, password } = req.body;
-    const user = UsersModel.find(
-      (u) => u.username === username && u.password === password
-    );
+    const user = await UsersModel.findOne({ username, password });
+
     if (user) {
-      const accessToken = jwt.sign(
-        { username: user.username, role: user.role },
-        JWT_SECRET
-      );
-      res.send({ accessToken });
+      const accessToken = jwt.sign({ username: user.username }, JWT_SECRET);
+      res.json({ accessToken });
     } else {
-      res.send("Username or password incorrect");
+      res.json("Username or password incorrect");
     }
   });
 
   // to sign up:
   app.post("/signup", async (req, res) => {
-    const body = req.body;
-    if (
-      body && // 👈 null and undefined check
-      Object.keys(body).length === 0 &&
-      body.constructor === Object
-    ) {
-      res.send("no body supplied");
-      return;
-    }
-    // get username and password from req.body
-    const { username, password, email } = body;
-    // console.log(body);
+    if (!checkForBody(req, res)) return;
+    const { username, password, email } = req.body;
     // does username already exist in DB?
-    const existingUser = await UsersModel.find((u) => {
-      if (u) {
-        return u.username === username;
-      }
-      return false;
-    });
-
-    console.log(existingUser);
-    if (existingUser.length != 0) {
+    const existingUser = await UsersModel.find({ username });
+    if (existingUser.length !== 0) {
       res.send("Username already exists, please use new username or login.");
     } else {
       // create user in DB
       let user = new UsersModel({ username, password, email });
-      let output = user.save((err, results) => {
+      user.save((err, results) => {
         if (err) {
-          return err;
+          console.log(err);
+        } else {
+          // send access token
+          const accessToken = jwt.sign(
+            { username: results.username },
+            JWT_SECRET
+          );
+          res.json({ accessToken });
         }
-        console.log(user);
-        return user;
       });
-      res.send(output);
     }
-    // create jwt token
-    // send token back
   });
 };
