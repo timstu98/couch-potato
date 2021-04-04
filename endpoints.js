@@ -2,7 +2,8 @@ const ExerciseModel = require("./models/exercise");
 const UsersModel = require("./models/user");
 const jwt = require("jsonwebtoken");
 
-// generating random numbers
+// Generate random numbers
+
 function randNums(numOfEx, lengthOfArray) {
   let randNums = [];
   for (let i = 0; i < numOfEx; i++) {
@@ -135,6 +136,50 @@ module.exports = function (app) {
     }
   }); 
 
+  // Get request for specific user
+  app.get("/users/:id", requireAdmin, async function (req, res) {
+    const { id } = req.params;
+    const result = await UsersModel.findById(id);
+    try {
+      res.json(result);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }); 
+
+  // Put request to update specific user
+  app.put("/users/:id", requireAdmin, async function (req, res) {
+    const { id } = req.params;
+    const { username, password, email, admin } = req.body;
+    try {
+       await UsersModel.findByIdAndUpdate({_id: id}, { username: username, password: password, email: email, admin: admin }, { new: true }, (err, doc) => {
+        if (err) {
+          res.send("Something went wrong when updating the user's data!");
+        } else {
+          res.send(doc)
+      }})
+      } catch (error) {
+      res.status(500).send(error);
+    }
+  }); 
+
+  // Delete request to remove specific user
+  app.delete("/users/:id", requireAdmin, async function (req, res) {
+      const { id } = req.params;
+      try {
+        await UsersModel.findOneAndDelete({_id: id},
+          function (err, docs) {
+            if (err){
+                res.send("Something went wrong, the user has not been deleted.")
+            }
+            else{
+                res.send(`The user ${docs} has been deleted.`);
+            }});
+      } catch (error) {
+      res.status(500).send(error);
+    }
+  }); 
+
   // to sign up:
     app.post("/signup", async (req, res) => {
     if (!checkForBody(req, res)) return;
@@ -161,6 +206,5 @@ module.exports = function (app) {
     }
   });
 
-};
-
-
+  
+  }
