@@ -12,22 +12,28 @@ function randNums(numOfEx, lengthOfArray) {
   return randNums;
 }
 
+// JWT authentication 
+
 const JWT_SECRET = "password123";
 
-// Making an auth token? (copied from Irene's notes):
-// const authJWT = (req, res, next) => {
-//   const auth = req.headers.authorization;
-//   if (auth) {
-//     const token = auth.split(" ")[1];
-//     jwt.verify(token, JWT_SECRET, (err, user) => {
-//       if (err) res.sendStatus(403);
-//       req.user = user;
-//       next();
-//     });
-//   } else {
-//     res.sendStatus(401);
-//   }
-// };
+const authJWT = (req, res, next) => {
+  const auth = req.headers.authorization;
+  if (auth) {
+    const token = auth.split(" ")[1];
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+      if (err) res.sendStatus(403);
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
+};
+
+const requireAdmin = (req, res, next) => {
+  authJWT(req, res, next);
+  if (req.user.admin === true) res.status(401).json("Admins only.");
+};
 
 function checkForBody(req, res) {
   // null and undefined check
@@ -105,8 +111,8 @@ module.exports = function (app) {
     }
   });
 
-  // to login
-  app.post("/login", async (req, res) => {
+    // to login
+    app.post("/login", async (req, res) => {
     if (!checkForBody(req, res)) return;
     const { username, password } = req.body;
     const user = await UsersModel.findOne({ username, password });
@@ -119,17 +125,27 @@ module.exports = function (app) {
     }
   });
 
+  // Get request for all users
+  app.get("/users", requireAdmin, async function (req, res) {
+    const all = await UsersModel.find();
+    try {
+      res.json(all);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  }); 
+
   // to sign up:
-  app.post("/signup", async (req, res) => {
+    app.post("/signup", async (req, res) => {
     if (!checkForBody(req, res)) return;
-    const { username, password, email } = req.body;
+    const { username, password, email, admin } = req.body;
     // does username already exist in DB?
     const existingUser = await UsersModel.find({ username });
     if (existingUser.length !== 0) {
       res.send("Username already exists, please use new username or login.");
     } else {
       // create user in DB
-      let user = new UsersModel({ username, password, email });
+      let user = new UsersModel({ username, password, email, admin});
       user.save((err, results) => {
         if (err) {
           console.log(err);
@@ -144,4 +160,7 @@ module.exports = function (app) {
       });
     }
   });
+
 };
+
+
