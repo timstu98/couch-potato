@@ -13,7 +13,7 @@ module.exports = function (app) {
       let id = req.query.id;
       let save = req.query.save;
   
-      // could be better to decode the JWT token to get the ID 
+      // could decode the JWT token to get the ID 
       // but i'm not sure how to get that from the post request header
 
       if (save === "yes" && id) {
