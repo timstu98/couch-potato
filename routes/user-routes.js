@@ -9,7 +9,7 @@ module.exports = function (app) {
         if (!func.checkForBody(req, res)) return;
         const { username, password } = req.body;
         const user = await UsersModel.findOne({ username, password });
-    
+      
         if (user) {
           const accessToken = jwt.sign({ username: user.username }, func.JWT_SECRET);
           res.json({ accessToken });
@@ -99,4 +99,4 @@ module.exports = function (app) {
       });
 
     }
-    
+  
