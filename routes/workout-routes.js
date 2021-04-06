@@ -5,7 +5,7 @@ const func = require("../functions")
 module.exports = function (app) {
    
     app.get("/workout", async function (req, res) {
-     
+    
       let time = req.query.time;
       let musclegroup = req.query.musclegroup;
       let difficulty = req.query.difficulty;
@@ -63,5 +63,6 @@ module.exports = function (app) {
     });
 
 }
+
 
 
