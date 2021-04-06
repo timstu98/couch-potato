@@ -11,27 +11,24 @@ module.exports = function (app) {
       // inputs from the user:
     
       let id = req.query.id;
-      let usepreferences = req.query.usepreferences;
       let time, difficulty, musclegroup, type;
 
-      if (id && usepreferences === "yes") {
-        let user = await UserModel.findById({ _id: id });
-        time = user.preferences.time;
-        difficulty = user.preferences.difficulty;
-        musclegroup = user.preferences.musclegroup;
-        type = user.preferences.type;
-      } else if (req.query.time && req.query.musclegroup 
+      if (req.query.time && req.query.musclegroup 
       && req.query.difficulty && req.query.type) {
         time = req.query.time;
         musclegroup = req.query.musclegroup;
         difficulty = req.query.difficulty;
         type = req.query.type; // strength vs tone
+      } else if (id) {
+          let user = await UserModel.findById({ _id: id });
+          time = user.preferences.time;
+          difficulty = user.preferences.difficulty;
+          musclegroup = user.preferences.musclegroup;
+          type = user.preferences.type;
       } else {
-        res.send(`To use your saved preferences, please enter your user ID and usepreferences: yes. 
+        res.send(`To use your saved preferences, please enter your user ID.
         Otherwise, enter time, musclegroup, difficulty and type.`)
       };
-
-      console.log(type, difficulty, musclegroup, time);
 
       // calculating how many exercises to fetch:
       let numOfEx;
