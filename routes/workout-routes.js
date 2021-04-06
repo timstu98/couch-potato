@@ -2,20 +2,11 @@ const ExerciseModel = require("../models/exercise");
 const func = require("../functions")
 
 module.exports = function (app) {
-    // simple get request to test if working:
-    app.get("/random", async function (_, res) {
-      let e = await ExerciseModel.find({});
-      let output = e[Math.floor(Math.random() * e.length) + 1];
-      try {
-        res.json(output);
-      } catch (error) {
-        res.status(500).send(error);
-      }
-    });
+  
   
     // to generate a workout:
     // (assuming I already have user preferences)
-    app.get("/workout", async function (req, res) {
+    app.get("/workouts", async function (req, res) {
       // inputs from the user:
       let time = req.query.time;
       let musclegroup = req.query.musclegroup;
