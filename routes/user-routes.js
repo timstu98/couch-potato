@@ -23,7 +23,7 @@ module.exports = function (app) {
             }
           })
     } else {
-      res.send("Please provide a user ID.")
+      res.send("Please provide your user ID.")
     }})
 
     // Post request to log in

@@ -5,7 +5,6 @@ const func = require("../functions")
 
 module.exports = function (app) {
   
-  
     // to generate a workout:
     // (assuming I already have user preferences)
     app.get("/workouts", async function (req, res) {
