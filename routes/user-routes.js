@@ -2,11 +2,9 @@ const UsersModel = require("../models/user");
 const func = require ('../functions.js');
 const jwt = require("jsonwebtoken");
 
-// JWT authentication 
-
 module.exports = function (app) {
 
-    // to login
+    // Post request to log in
     app.post("/login", async (req, res) => {
         if (!func.checkForBody(req, res)) return;
         const { username, password } = req.body;
@@ -19,7 +17,7 @@ module.exports = function (app) {
           res.json("Username or password incorrect");
         }
       });
-    
+
       // Get request for all users
       app.get("/users", func.requireAdmin, async function (req, res) {
         const all = await UsersModel.find();
