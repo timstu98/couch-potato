@@ -13,7 +13,7 @@ function checkForBody(req, res) {
     }
     return true;
   }
-  
+
 const JWT_SECRET = "password123";
 
   const authJWT = (req, res, next) => {
@@ -49,4 +49,3 @@ exports.checkForBody = checkForBody;
 exports.JWT_SECRET = JWT_SECRET;
 exports.requireAdmin = requireAdmin;
 exports.randNums = randNums;
-
