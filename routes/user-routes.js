@@ -4,6 +4,28 @@ const jwt = require("jsonwebtoken");
 
 module.exports = function (app) {
 
+    // Save user preferences
+    app.post("/users/preferences", async function (req, res) {
+      // inputs from the user:
+      let time = req.query.time;
+      let musclegroup = req.query.musclegroup;
+      let difficulty = req.query.difficulty;
+      let type = req.query.type; // strength vs tone
+      let id = req.query.id;
+
+      if (id) {
+        let user = await UsersModel.findByIdAndUpdate({ _id: id }, 
+          { preferences: { time: time, musclegroup: musclegroup, difficulty: difficulty, type: type}}, { new: true }, (err, result) => {
+            if (err) {
+              res.send("Something went wrong when updating the user's data!");
+            } else {
+              res.send(result)
+            }
+          })
+    } else {
+      res.send("Please provide a user ID.")
+    }})
+
     // Post request to log in
     app.post("/login", async (req, res) => {
         if (!func.checkForBody(req, res)) return;

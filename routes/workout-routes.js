@@ -2,6 +2,7 @@ const ExerciseModel = require("../models/exercise");
 const UserModel = require("../models/user");
 const func = require("../functions")
 
+
 module.exports = function (app) {
   
   
@@ -9,20 +10,29 @@ module.exports = function (app) {
     // (assuming I already have user preferences)
     app.get("/workouts", async function (req, res) {
       // inputs from the user:
-      let time = req.query.time;
-      let musclegroup = req.query.musclegroup;
-      let difficulty = req.query.difficulty;
-      let type = req.query.type; // strength vs tone
-      let save = req.query.save;
+    
       let id = req.query.id;
+      let usepreferences = req.query.usepreferences;
+      let time, difficulty, musclegroup, type;
 
-      if (save === "yes" && id) {
-        let user = await UserModel.findByIdAndUpdate({ _id: id }, 
-          { preferences: { time: time, musclegroup: musclegroup, difficulty: difficulty, type: type}}, { new: true }, (err) => {
-            if (err) {
-              res.send("Something went wrong when updating the user's data!");
-            }})
-      }
+      if (id && usepreferences === "yes") {
+        let user = await UserModel.findById({ _id: id });
+        time = user.preferences.time;
+        difficulty = user.preferences.difficulty;
+        musclegroup = user.preferences.musclegroup;
+        type = user.preferences.type;
+      } else if (req.query.time && req.query.musclegroup 
+      && req.query.difficulty && req.query.type) {
+        time = req.query.time;
+        musclegroup = req.query.musclegroup;
+        difficulty = req.query.difficulty;
+        type = req.query.type; // strength vs tone
+      } else {
+        res.send(`To use your saved preferences, please enter your user ID and usepreferences: yes. 
+        Otherwise, enter time, musclegroup, difficulty and type.`)
+      };
+
+      console.log(type, difficulty, musclegroup, time);
 
       // calculating how many exercises to fetch:
       let numOfEx;
@@ -31,9 +41,7 @@ module.exports = function (app) {
       } else if (type === "tone") {
         numOfEx = time / 3.5; // time taken per exercise (3 sets, 12 reps, 30sec breaks, based on 3 sec per rep)
       } else {
-        console.log(
-          "Type of workout not valid. Please enter 'strength' or 'tone'."
-        );
+        console.log("Type of workout not valid. Please enter 'strength' or 'tone'.");
       }
   
       // fetch appropriate exercises from the db
@@ -59,3 +67,4 @@ module.exports = function (app) {
     });
 
 }
+
