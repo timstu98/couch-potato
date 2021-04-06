@@ -1,4 +1,5 @@
 const ExerciseModel = require("../models/exercise");
+const UserModel = require("../models/user");
 const func = require("../functions")
 
 module.exports = function (app) {
@@ -12,21 +13,24 @@ module.exports = function (app) {
       let musclegroup = req.query.musclegroup;
       let difficulty = req.query.difficulty;
       let type = req.query.type; // strength vs tone
-  
-      // test output in postman:
-      // let output = {
-      //   time: time,
-      //   muscleGroup: muscleGroup,
-      //   level: level,
-      //   type: type,
-      // };
-  
+      let save = req.query.save;
+      let id = req.query.id;
+
+      if (save === "yes" && id) {
+        let user = await UserModel.findByIdAndUpdate({ _id: id }, 
+          { preferences: { time: time, musclegroup: musclegroup, difficulty: difficulty, type: type}}, { new: true }, (err) => {
+            if (err) {
+              res.send("Something went wrong when updating the user's data!");
+            }})
+      }
+
       // calculating how many exercises to fetch:
       let numOfEx;
       if (type === "strength") {
         numOfEx = time / 5; // time taken per exercise (5 sets, 5 reps, 45sec breaks, based on 3 sec per rep)
       } else if (type === "tone") {
         numOfEx = time / 3.5; // time taken per exercise (3 sets, 12 reps, 30sec breaks, based on 3 sec per rep)
+      } else {
         console.log(
           "Type of workout not valid. Please enter 'strength' or 'tone'."
         );
