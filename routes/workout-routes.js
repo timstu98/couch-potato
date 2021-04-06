@@ -1,5 +1,7 @@
 const ExerciseModel = require("../models/exercise");
+const UserModel = require("../models/user");
 const func = require("../functions");
+const WorkoutModel = require("../models/workout");
 
 module.exports = function (app) {
   console.log("routes setup");
@@ -15,21 +17,36 @@ module.exports = function (app) {
     }
   });
   // to generate a workout:
-  // (assuming I already have user preferences)
   app.get("/workouts", async function (req, res) {
     // inputs from the user:
     let time = req.query.time;
     let musclegroup = req.query.musclegroup;
     let difficulty = req.query.difficulty;
     let type = req.query.type; // strength vs tone
+    let save = req.query.save;
+    let id = req.query.id; // I need to keep this on this file also
 
-    // test output in postman:
-    // let output = {
-    //   time: time,
-    //   muscleGroup: muscleGroup,
-    //   level: level,
-    //   type: type,
-    // };
+    let saveWorkout = req.query.saveworkout;
+
+    if (save === "yes" && id) {
+      let user = await UserModel.findByIdAndUpdate(
+        { _id: id },
+        {
+          preferences: {
+            time: time,
+            musclegroup: musclegroup,
+            difficulty: difficulty,
+            type: type,
+          },
+        },
+        { new: true },
+        (err) => {
+          if (err) {
+            res.send("Something went wrong when updating the user's data!");
+          }
+        }
+      );
+    }
 
     // calculating how many exercises to fetch:
     let numOfEx;
@@ -56,38 +73,23 @@ module.exports = function (app) {
       output.push(exercises[i]);
     }
 
+    // save workouts
+    if (saveWorkout === "true") {
+      let savedWorkout = new WorkoutModel({ userId: id, exercises: output });
+      savedWorkout.save((err, results) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Workout saved");
+        }
+      });
+    }
+
     // output the exercises to the user
     try {
       res.json(output);
     } catch (error) {
       res.status(500).send(error);
     }
-  });
-
-  // saving workouts
-  app.post("/workouts", async (req, res) => {
-    // This is obviously a draft, please ignore
-    // if (!func.checkForBody(req, res)) return;
-    // const { username, password, email, admin } = req.body;
-    // // does username already exist in DB?
-    // const existingUser = await UsersModel.find({ username });
-    // if (existingUser.length !== 0) {
-    //   res.send("Username already exists, please use new username or login.");
-    // } else {
-    //   // create user in DB
-    //   let user = new UsersModel({ username, password, email, admin });
-    //   user.save((err, results) => {
-    //     if (err) {
-    //       console.log(err);
-    //     } else {
-    //       // send access token
-    //       const accessToken = jwt.sign(
-    //         { username: results.username },
-    //         func.JWT_SECRET
-    //       );
-    //       res.json({ accessToken });
-    //     }
-    //   });
-    // }
   });
 };
