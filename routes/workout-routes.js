@@ -13,7 +13,7 @@ module.exports = function (app) {
     try {
       res.json(output);
     } catch (error) {
-      res.status(500).send(error);
+      res.status(500).json(error);
     }
   });
   // to generate a workout:
@@ -90,6 +90,17 @@ module.exports = function (app) {
       res.json(output);
     } catch (error) {
       res.status(500).send(error);
+    }
+  });
+
+  app.get("/workouts/saved", async function (req, res) {
+    console.log("Retrieving saved workouts");
+    const id = req.query.id;
+    let savedWorkouts = await WorkoutModel.find({ userId: id });
+    try {
+      res.json(savedWorkouts);
+    } catch (error) {
+      res.status(500).json(error);
     }
   });
 };
