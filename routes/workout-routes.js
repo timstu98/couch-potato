@@ -17,35 +17,32 @@ module.exports = function (app) {
     }
   });
   // to generate a workout:
+  // (assuming I already have user preferences)
   app.get("/workouts", async function (req, res) {
     // inputs from the user:
-    let time = req.query.time;
-    let musclegroup = req.query.musclegroup;
-    let difficulty = req.query.difficulty;
-    let type = req.query.type; // strength vs tone
-    let save = req.query.save;
-    let id = req.query.id; // I need to keep this on this file also
 
-    let saveWorkout = req.query.saveworkout;
+    let id = req.query.id;
+    let time, difficulty, musclegroup, type;
 
-    if (save === "yes" && id) {
-      let user = await UserModel.findByIdAndUpdate(
-        { _id: id },
-        {
-          preferences: {
-            time: time,
-            musclegroup: musclegroup,
-            difficulty: difficulty,
-            type: type,
-          },
-        },
-        { new: true },
-        (err) => {
-          if (err) {
-            res.send("Something went wrong when updating the user's data!");
-          }
-        }
-      );
+    if (
+      req.query.time &&
+      req.query.musclegroup &&
+      req.query.difficulty &&
+      req.query.type
+    ) {
+      time = req.query.time;
+      musclegroup = req.query.musclegroup;
+      difficulty = req.query.difficulty;
+      type = req.query.type; // strength vs tone
+    } else if (id) {
+      let user = await UserModel.findById({ _id: id });
+      time = user.preferences.time;
+      difficulty = user.preferences.difficulty;
+      musclegroup = user.preferences.musclegroup;
+      type = user.preferences.type;
+    } else {
+      res.send(`To use your saved preferences, please enter your user ID.
+        Otherwise, enter time, musclegroup, difficulty and type.`);
     }
 
     // calculating how many exercises to fetch:
@@ -65,9 +62,8 @@ module.exports = function (app) {
       difficulty: difficulty[0].toUpperCase() + difficulty.substring(1),
     });
 
-    let indexes = func.randNums(numOfEx, exercises.length);
-
     // select number of random exercises to output
+    let indexes = func.randNums(numOfEx, exercises.length);
     let output = [];
     for (let i = 0; i < indexes.length; i++) {
       output.push(exercises[i]);
