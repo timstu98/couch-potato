@@ -115,6 +115,7 @@ module.exports = function (app) {
 
   // to sign up:
   app.post("/signup", async (req, res) => {
+    console.log(req.body);
     if (!func.checkForBody(req, res)) return;
     const { username, password, email, admin } = req.body;
     // does username already exist in DB?

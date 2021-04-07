@@ -23,6 +23,7 @@ module.exports = function (app) {
 
     let id = req.query.id;
     let time, difficulty, musclegroup, type;
+    let saveWorkout = req.query.saveworkout;
 
     if (
       req.query.time &&
@@ -51,6 +52,7 @@ module.exports = function (app) {
       numOfEx = time / 5; // time taken per exercise (5 sets, 5 reps, 45sec breaks, based on 3 sec per rep)
     } else if (type === "tone") {
       numOfEx = time / 3.5; // time taken per exercise (3 sets, 12 reps, 30sec breaks, based on 3 sec per rep)
+    } else {
       console.log(
         "Type of workout not valid. Please enter 'strength' or 'tone'."
       );
