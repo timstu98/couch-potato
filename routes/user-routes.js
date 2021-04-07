@@ -6,13 +6,12 @@ module.exports = function (app) {
 
     // Save user preferences
     app.post("/users/preferences", async function (req, res) {
-      // inputs from the user:
+    
       let time = req.query.time;
       let musclegroup = req.query.musclegroup;
       let difficulty = req.query.difficulty;
-      let type = req.query.type; // strength vs tone
-      // let id = req.query.id; 
-
+      let type = req.query.type; 
+      
       const authHeader = req.headers.authorization
       const token = authHeader && authHeader.split(' ')[1]
       const decoded = jwt.verify(token, func.JWT_SECRET)
@@ -36,7 +35,7 @@ module.exports = function (app) {
         if (!func.checkForBody(req, res)) return;
         const { username, password } = req.body;
         const user = await UsersModel.findOne({ username, password });
-      
+    
         if (user) {
           const accessToken = jwt.sign({ id: user._id }, func.JWT_SECRET);
           res.json({ accessToken });
@@ -126,4 +125,4 @@ module.exports = function (app) {
       });
 
     }
-  
+    
