@@ -121,12 +121,17 @@ module.exports = function (app) {
     const existingUser = await UsersModel.find({ username });
     if (existingUser.length !== 0) {
       res.send("Username already exists, please use new username or login.");
+    }
+    //check password length
+    if (password.length < 8) {
+      res.send("Password shall be at least 8 digits.");
     } else {
       // create user in DB
       let user = new UsersModel({ username, password, email, admin });
       user.save((err, results) => {
         if (err) {
           console.log(err);
+          res.send(err);
         } else {
           // send access token
           const accessToken = jwt.sign(
