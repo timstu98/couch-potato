@@ -23,17 +23,17 @@ module.exports = function (app) {
         musclegroup = req.query.musclegroup;
         difficulty = req.query.difficulty;
         type = req.query.type; // strength vs tone
-        console.log("Using parameters")
+        console.log("Using parameters to generate exercises")
       } else if (id) {
         let user = await UserModel.findById({ _id: id });
         time = user.preferences.time;
         difficulty = user.preferences.difficulty;
         musclegroup = user.preferences.musclegroup;
         type = user.preferences.type;
-        console.log("Using preferences");
+        console.log("Using preferences to generate exercises");
       } else {
-        res.send(`To use your saved preferences, please enter your user ID.
-        Otherwise, enter time, musclegroup, difficulty and type.`)
+        res.send(`Please enter time, musclegroup, difficulty and type.
+        Otherwise, the workout generator will use your preferences.`)
       };
 
       // calculating how many exercises to fetch:

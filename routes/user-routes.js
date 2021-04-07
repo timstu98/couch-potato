@@ -22,7 +22,7 @@ module.exports = function (app) {
         let user = await UsersModel.findByIdAndUpdate({ _id: id }, 
           { preferences: { time: time, musclegroup: musclegroup, difficulty: difficulty, type: type}}, { new: true }, (err, result) => {
             if (err) {
-              res.send("Something went wrong when updating the user's data!");
+              res.send("Something went wrong when updating the user's preferences!");
             } else {
               res.send(result)
             }
