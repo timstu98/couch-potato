@@ -4,7 +4,6 @@ const WorkoutModel = require("../models/workout");
 const func = require("../functions");
 const jwt = require("jsonwebtoken");
 
-
 module.exports = function (app) {
   console.log("routes setup");
   // I think this is useful for us, but also for the API user, to test endpoints
@@ -27,10 +26,10 @@ module.exports = function (app) {
     let saveWorkout = req.query.saveworkout;
 
     // Get user's ID from JWT token
-    const authHeader = req.headers.authorization
-    const token = authHeader && authHeader.split(' ')[1]
-    const decoded = jwt.verify(token, func.JWT_SECRET)
-    const id = decoded.username
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, func.JWT_SECRET);
+    const id = decoded.username;
 
     if (
       req.query.time &&
@@ -75,7 +74,7 @@ module.exports = function (app) {
     let indexes = func.randNums(numOfEx, exercises.length);
     let output = [];
     for (let i = 0; i < indexes.length; i++) {
-      output.push(exercises[i]);
+      output.push(exercises[indexes[i]]);
     }
 
     // save workouts
