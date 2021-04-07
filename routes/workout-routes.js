@@ -1,7 +1,9 @@
 const ExerciseModel = require("../models/exercise");
 const UserModel = require("../models/user");
-const func = require("../functions");
 const WorkoutModel = require("../models/workout");
+const func = require("../functions");
+const jwt = require("jsonwebtoken");
+
 
 module.exports = function (app) {
   console.log("routes setup");
@@ -21,9 +23,14 @@ module.exports = function (app) {
   app.get("/workouts", async function (req, res) {
     // inputs from the user:
 
-    let id = req.query.id;
     let time, difficulty, musclegroup, type;
     let saveWorkout = req.query.saveworkout;
+
+    // Get user's ID from JWT token
+    const authHeader = req.headers.authorization
+    const token = authHeader && authHeader.split(' ')[1]
+    const decoded = jwt.verify(token, func.JWT_SECRET)
+    const id = decoded.username
 
     if (
       req.query.time &&
@@ -34,7 +41,7 @@ module.exports = function (app) {
       time = req.query.time;
       musclegroup = req.query.musclegroup;
       difficulty = req.query.difficulty;
-      type = req.query.type; // strength vs tone
+      type = req.query.type;
     } else if (id) {
       let user = await UserModel.findById({ _id: id });
       time = user.preferences.time;
@@ -42,8 +49,8 @@ module.exports = function (app) {
       musclegroup = user.preferences.musclegroup;
       type = user.preferences.type;
     } else {
-      res.send(`To use your saved preferences, please enter your user ID.
-        Otherwise, enter time, musclegroup, difficulty and type.`);
+      res.send(`Please enter time, musclegroup, difficulty and type. 
+      Otherwise, your preferences will be used.`);
     }
 
     // calculating how many exercises to fetch:
@@ -74,7 +81,7 @@ module.exports = function (app) {
     // save workouts
     if (saveWorkout === "true") {
       let savedWorkout = new WorkoutModel({ userId: id, exercises: output });
-      savedWorkout.save((err, results) => {
+      savedWorkout.save((err) => {
         if (err) {
           console.log(err);
         } else {

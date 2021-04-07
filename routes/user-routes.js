@@ -3,6 +3,7 @@ const func = require("../functions.js");
 const jwt = require("jsonwebtoken");
 
 module.exports = function (app) {
+
   // Save user preferences
   app.post("/users/preferences", async function (req, res) {
     // inputs from the user:
@@ -10,7 +11,11 @@ module.exports = function (app) {
     let musclegroup = req.query.musclegroup;
     let difficulty = req.query.difficulty;
     let type = req.query.type; // strength vs tone
-    let id = req.query.id;
+    
+    const authHeader = req.headers.authorization
+    const token = authHeader && authHeader.split(' ')[1]
+    const decoded = jwt.verify(token, func.JWT_SECRET)
+    const id = decoded.username
 
     if (id) {
       let user = await UsersModel.findByIdAndUpdate(
@@ -26,15 +31,13 @@ module.exports = function (app) {
         { new: true },
         (err, result) => {
           if (err) {
-            res.send("Something went wrong when updating the user's data!");
+            res.send("Something went wrong when adding the user's preferences.");
           } else {
             res.send(result);
           }
         }
       );
-    } else {
-      res.send("Please provide your user ID.");
-    }
+    } 
   });
 
   // Post request to log in
@@ -45,7 +48,7 @@ module.exports = function (app) {
 
     if (user) {
       const accessToken = jwt.sign(
-        { username: user.username },
+        { id: user._id },
         func.JWT_SECRET
       );
       res.json({ accessToken });
@@ -136,7 +139,7 @@ module.exports = function (app) {
         } else {
           // send access token
           const accessToken = jwt.sign(
-            { username: results.username },
+            { id: results._id },
             func.JWT_SECRET
           );
           res.json({ accessToken });
