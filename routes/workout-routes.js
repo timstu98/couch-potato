@@ -1,35 +1,43 @@
 const ExerciseModel = require("../models/exercise");
+const UserModel = require("../models/user");
 const func = require("../functions")
 
+
 module.exports = function (app) {
-  
   
     // to generate a workout:
     // (assuming I already have user preferences)
     app.get("/workouts", async function (req, res) {
       // inputs from the user:
-      let time = req.query.time;
-      let musclegroup = req.query.musclegroup;
-      let difficulty = req.query.difficulty;
-      let type = req.query.type; // strength vs tone
-  
-      // test output in postman:
-      // let output = {
-      //   time: time,
-      //   muscleGroup: muscleGroup,
-      //   level: level,
-      //   type: type,
-      // };
-  
+    
+      let id = req.query.id;
+      let time, difficulty, musclegroup, type;
+
+      if (req.query.time && req.query.musclegroup 
+      && req.query.difficulty && req.query.type) {
+        time = req.query.time;
+        musclegroup = req.query.musclegroup;
+        difficulty = req.query.difficulty;
+        type = req.query.type; // strength vs tone
+      } else if (id) {
+          let user = await UserModel.findById({ _id: id });
+          time = user.preferences.time;
+          difficulty = user.preferences.difficulty;
+          musclegroup = user.preferences.musclegroup;
+          type = user.preferences.type;
+      } else {
+        res.send(`To use your saved preferences, please enter your user ID.
+        Otherwise, enter time, musclegroup, difficulty and type.`)
+      };
+
       // calculating how many exercises to fetch:
       let numOfEx;
       if (type === "strength") {
         numOfEx = time / 5; // time taken per exercise (5 sets, 5 reps, 45sec breaks, based on 3 sec per rep)
       } else if (type === "tone") {
         numOfEx = time / 3.5; // time taken per exercise (3 sets, 12 reps, 30sec breaks, based on 3 sec per rep)
-        console.log(
-          "Type of workout not valid. Please enter 'strength' or 'tone'."
-        );
+      } else {
+        console.log("Type of workout not valid. Please enter 'strength' or 'tone'.");
       }
   
       // fetch appropriate exercises from the db
@@ -55,3 +63,4 @@ module.exports = function (app) {
     });
 
 }
+
