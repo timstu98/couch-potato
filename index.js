@@ -3,7 +3,6 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const app = express();
 
-
 const port = 3000;
 const mongoDB =
   "mongodb+srv://amelia:cluster44@cluster0.vdpac.mongodb.net/justgowithfit?retryWrites=true&w=majority";
@@ -18,8 +17,9 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 app.use(express.json()); // was bodyParser instead of express, but depreciated
 app.use(express.urlencoded({ extended: false })); // was bodyParser instead of express, but depreciated
-require("./routes/user-routes.js")(app); // requires should always be at the top
+require("./routes/user-routes.js")(app);
 require("./routes/workout-routes.js")(app);
+require("./routes/admin-routes.js")(app);
 
 db.once("open", listen); // make sure connection to DB is open before starting server
 

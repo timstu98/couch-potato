@@ -26,10 +26,7 @@ module.exports = function (app) {
     let saveWorkout = req.query.saveworkout;
 
     // Get user's ID from JWT token
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, func.JWT_SECRET);
-    const id = decoded.username;
+    const id = func.getUserID();
 
     if (
       req.query.time &&
@@ -100,7 +97,9 @@ module.exports = function (app) {
   app.get("/workouts/saved", async function (req, res) {
     console.log("Retrieving saved workouts");
     const id = req.query.id;
-    let savedWorkouts = await WorkoutModel.find({ userId: id });
+    let savedWorkouts = await WorkoutModel.find({ userId: id }).populate(
+      "exercises"
+    );
     try {
       res.json(savedWorkouts);
     } catch (error) {
