@@ -11,7 +11,12 @@ module.exports = function (app) {
       let musclegroup = req.query.musclegroup;
       let difficulty = req.query.difficulty;
       let type = req.query.type; // strength vs tone
-      let id = req.query.id;
+      // let id = req.query.id; 
+
+      const authHeader = req.headers.authorization
+      const token = authHeader && authHeader.split(' ')[1]
+      const decoded = jwt.verify(token, func.JWT_SECRET)
+      const id = decoded.username
 
       if (id) {
         let user = await UsersModel.findByIdAndUpdate({ _id: id }, 
@@ -33,7 +38,7 @@ module.exports = function (app) {
         const user = await UsersModel.findOne({ username, password });
       
         if (user) {
-          const accessToken = jwt.sign({ username: user.username }, func.JWT_SECRET);
+          const accessToken = jwt.sign({ id: user._id }, func.JWT_SECRET);
           res.json({ accessToken });
         } else {
           res.json("Username or password incorrect");
@@ -111,7 +116,7 @@ module.exports = function (app) {
             } else {
               // send access token
               const accessToken = jwt.sign(
-                { username: results.username },
+                { id: results._id },
                 func.JWT_SECRET
               );
               res.json({ accessToken });

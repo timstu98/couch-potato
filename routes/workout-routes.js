@@ -1,7 +1,7 @@
 const ExerciseModel = require("../models/exercise");
 const UserModel = require("../models/user");
 const func = require("../functions")
-
+const jwt = require("jsonwebtoken");
 
 module.exports = function (app) {
   
@@ -9,22 +9,28 @@ module.exports = function (app) {
     // (assuming I already have user preferences)
     app.get("/workouts", async function (req, res) {
       // inputs from the user:
-    
-      let id = req.query.id;
-      let time, difficulty, musclegroup, type;
 
+      const authHeader = req.headers.authorization
+      const token = authHeader && authHeader.split(' ')[1]
+      const decoded = jwt.verify(token, func.JWT_SECRET)
+      const id = decoded.username
+
+      let time, difficulty, musclegroup, type;
+      
       if (req.query.time && req.query.musclegroup 
       && req.query.difficulty && req.query.type) {
         time = req.query.time;
         musclegroup = req.query.musclegroup;
         difficulty = req.query.difficulty;
         type = req.query.type; // strength vs tone
+        console.log("Using parameters")
       } else if (id) {
-          let user = await UserModel.findById({ _id: id });
-          time = user.preferences.time;
-          difficulty = user.preferences.difficulty;
-          musclegroup = user.preferences.musclegroup;
-          type = user.preferences.type;
+        let user = await UserModel.findById({ _id: id });
+        time = user.preferences.time;
+        difficulty = user.preferences.difficulty;
+        musclegroup = user.preferences.musclegroup;
+        type = user.preferences.type;
+        console.log("Using preferences");
       } else {
         res.send(`To use your saved preferences, please enter your user ID.
         Otherwise, enter time, musclegroup, difficulty and type.`)

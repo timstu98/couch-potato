@@ -44,8 +44,13 @@ function randNums(numOfEx, lengthOfArray) {
     }
     return randNums;
   }
+
+function getUserID() {
+      console.log("hello")
+}
   
 exports.checkForBody = checkForBody;
 exports.JWT_SECRET = JWT_SECRET;
 exports.requireAdmin = requireAdmin;
 exports.randNums = randNums;
+exports.getUserID = getUserID;
