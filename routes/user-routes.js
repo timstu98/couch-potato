@@ -41,20 +41,6 @@ module.exports = function (app) {
 
   // to log in:
   app.post("/login", async (req, res) => {
-    if (!func.checkForBody(req, res)) return;
-    const { username, password } = req.body;
-    const user = await UsersModel.findOne({ username, password });
-
-    if (user) {
-      const accessToken = jwt.sign({ id: user._id }, func.JWT_SECRET);
-      res.json({ accessToken });
-    } else {
-      res.json("Username or password incorrect.acefitness");
-    }
-  });
-
-  //password encryption
-  app.post("/logins", async (req, res) => {
     const user = await UsersModel.findOne({
       username: req.body.username,
     }).exec();
@@ -65,9 +51,9 @@ module.exports = function (app) {
       const verify = await bcrypt.compare(req.body.password, user.password);
       console.log("This is" + verify);
       if (verify) {
-        res.json("Success!");
+        res.json({ accessToken });
       } else {
-        res.json("Try again.");
+        res.json("Username or password incorrect. Try again.");
       }
     } catch {
       res.status(500).send();

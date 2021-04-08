@@ -21,7 +21,7 @@ module.exports = function (app) {
     let time, difficulty, musclegroup, type;
     let saveWorkout = req.query.saveworkout;
 
-    const id = func.getUserID();
+    const id = func.getUserID(req);
 
     if (
       req.query.time &&
