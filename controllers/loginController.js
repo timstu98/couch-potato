@@ -1,3 +1,4 @@
+
 var User = require('../models/userModel');
 const {body,validator} = require('express-validator');
 const {validationResult} = require('express-validator');
@@ -7,16 +8,17 @@ const commentsModel = require('../models/commentsModel');
 const {sanitizeBody} = require('express-validator/filter');
 
 
-exports.signup_user_post = [ 
-
+exports.signup_user_post = [
   // Validate fields.
-  body('username', 'username must not be empty.').isLength({ min: 1 }).trim(),
-   // password must be at least 8 chars long
-  body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 chars long'),
+  body("username", "username must not be empty.").isLength({ min: 1 }).trim(),
+  // password must be at least 8 chars long
+  body("password")
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 chars long"),
 
   //Sanitize fields.
-  sanitizeBody('username').escape(),
-  
+  sanitizeBody("username").escape(),
+
   (req, res) => {
     //Extract validation errors from request
     const errors = validationResult(req);
@@ -43,3 +45,4 @@ exports.login_user_post = [
 
     }
 ]
+
