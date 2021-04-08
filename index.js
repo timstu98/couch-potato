@@ -19,7 +19,6 @@ app.use(express.json()); // was bodyParser instead of express, but depreciated
 app.use(express.urlencoded({ extended: false })); // was bodyParser instead of express, but depreciated
 require("./routes/user-routes.js")(app);
 require("./routes/workout-routes.js")(app);
-require("./routes/admin-routes.js")(app);
 
 db.once("open", listen); // make sure connection to DB is open before starting server
 
