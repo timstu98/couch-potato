@@ -1,11 +1,10 @@
-require("dotenv").config();
+require("dotenv").config({ path: __dirname + "/.env" });
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 
 const port = 3000;
-const mongoDB =
-  "mongodb+srv://amelia:cluster44@cluster0.vdpac.mongodb.net/justgowithfit?retryWrites=true&w=majority";
+const mongoDB = process.env.MONGODB_URI;
 mongoose.connect(mongoDB, {
   useNewUrlParser: true,
   useFindAndModify: true,

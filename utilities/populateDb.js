@@ -3,13 +3,13 @@
 console.log(
   "This script populates your database. With your specified database as argument"
 );
+require("dotenv").config({ path: __dirname + "/../.env" });
 
 // Get arguments passed on command line
 const Exercise = require("../models/exercise.js");
 const async = require("async");
 const mongoose = require("mongoose");
 const mongoDB = process.env.MONGODB_URI;
-console.log(process.env.MONGODB_URI);
 
 mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;

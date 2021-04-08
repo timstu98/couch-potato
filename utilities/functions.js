@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const UsersModel = require("../models/user");
+require("dotenv").config({ path: __dirname + "/../.env" });
 
 function checkForBody(req, res) {
   // null and undefined check
@@ -15,7 +16,7 @@ function checkForBody(req, res) {
   return true;
 }
 
-const JWT_SECRET = TOKEN_SECRET;
+const JWT_SECRET = process.env.TOKEN_SECRET;
 
 const authJWT = (req, res, next) => {
   const auth = req.headers.authorization;
