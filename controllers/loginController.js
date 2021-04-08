@@ -5,7 +5,6 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const commentsModel = require('../models/commentsModel');
 const {sanitizeBody} = require('express-validator/filter');
-const bcrypt = require("bcryptjs");
 
 
 exports.signup_user_post = [ 
@@ -24,43 +23,9 @@ exports.signup_user_post = [
 
     if (!errors.isEmpty()) {
       res.send('data failed validation')
-    }
-    
-    // Check username does not already exist 
-    User.find({'username': req.body.username }).exec( (err,found) => {
-      if (err) { return next(err)}
-      if (found.length !== 0) {
-        res.send('username exists')
-      }
-      else {
-        // hash password using bcrypt
-        bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
-          // if err, do something
-          if (err) {
-          console.log(err)
-          //res.send (err)
-            return
-          }
-          // store hashed password in databse  
-          userdetail = {
-            username: req.body.username,
-            password: hashedPassword,
-            status: 'regular' }
-      
-          var user = new User(userdetail);
-      
-          user.save(function (err, data) {
-            if (err) {
-              return next(err);
-          }
-          res.json('user created')
-        })
-        })
-      }
-    })
-  }
-]
+    } 
 
+  }]
 
 exports.login_user_post = [
     passport.authenticate('local', {session: false}),
@@ -77,5 +42,4 @@ exports.login_user_post = [
         })
 
     }
-    
 ]
