@@ -1,12 +1,9 @@
-
-var User = require('../models/userModel');
-const {body,validator} = require('express-validator');
-const {validationResult} = require('express-validator');
-const passport = require('passport');
-const jwt = require('jsonwebtoken');
-const commentsModel = require('../models/commentsModel');
-const {sanitizeBody} = require('express-validator/filter');
-
+var User = require("../models/userModel");
+const { body, validator } = require("express-validator");
+const { validationResult } = require("express-validator");
+const passport = require("passport");
+const jwt = require("jsonwebtoken");
+const { sanitizeBody } = require("express-validator/filter");
 
 exports.signup_user_post = [
   // Validate fields.
@@ -24,25 +21,25 @@ exports.signup_user_post = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      res.send('data failed validation')
-    } 
-
-  }]
+      res.send("data failed validation");
+    }
+  },
+];
 
 exports.login_user_post = [
-    passport.authenticate('local', {session: false}),
-    function (req, res) {
-      const token = jwt.sign({id: req.user._id.toJSON()}, process.env.SECRET, {expiresIn: '1h'});
-      res.json({
-        success: true,
-        token: 'Bearer' + token,
-        user: {
-          id: req.user._id,
-          username: req.user.username
-        },
-        secret: 'shhh'
-        })
-
-    }
-]
-
+  passport.authenticate("local", { session: false }),
+  function (req, res) {
+    const token = jwt.sign({ id: req.user._id.toJSON() }, process.env.SECRET, {
+      expiresIn: "1h",
+    });
+    res.json({
+      success: true,
+      token: "Bearer" + token,
+      user: {
+        id: req.user._id,
+        username: req.user.username,
+      },
+      secret: "shhh",
+    });
+  },
+];
