@@ -88,7 +88,7 @@ module.exports = function (app) {
   });
 
   app.get("/workouts/saved", async function (req, res) {
-    const id = req.query.id;
+    const id = func.getUserID(req);
     let savedWorkouts = await WorkoutModel.find({ userId: id }).populate(
       "exercises"
     );

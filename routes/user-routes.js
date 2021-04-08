@@ -49,8 +49,9 @@ module.exports = function (app) {
     }
     try {
       const verify = await bcrypt.compare(req.body.password, user.password);
-      console.log("This is" + verify);
+      console.log("This is " + verify);
       if (verify) {
+        const accessToken = jwt.sign({ id: user._id }, func.JWT_SECRET);
         res.json({ accessToken });
       } else {
         res.json("Username or password incorrect. Try again.");
@@ -62,7 +63,7 @@ module.exports = function (app) {
 
   // Save user preferences
   app.post("/users/preferences", async function (req, res) {
-    let { time, musclegroup, difficulty, type } = req.query;
+    let { time, musclegroup, difficulty, type } = req.body;
     const id = func.getUserID(req);
 
     // inputs from the user:
