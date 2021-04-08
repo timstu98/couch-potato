@@ -1,13 +1,12 @@
 const ExerciseModel = require("../models/exercise");
 const UserModel = require("../models/user");
 const WorkoutModel = require("../models/workout");
-const func = require("../functions");
+const func = require("../utilities/functions");
 const jwt = require("jsonwebtoken");
 
 module.exports = function (app) {
-  console.log("routes setup");
-  // I think this is useful for us, but also for the API user, to test endpoints
-  // please leave for now
+  console.log("Workout routes set up");
+
   app.get("/workouts/random", async function (_, res) {
     let e = await ExerciseModel.find({});
     let output = e[Math.floor(Math.random() * e.length) + 1];
@@ -17,15 +16,11 @@ module.exports = function (app) {
       res.status(500).json(error);
     }
   });
-  // to generate a workout:
-  // (assuming I already have user preferences)
-  app.get("/workouts", async function (req, res) {
-    // inputs from the user:
 
+  app.get("/workouts", async function (req, res) {
     let time, difficulty, musclegroup, type;
     let saveWorkout = req.query.saveworkout;
 
-    // Get user's ID from JWT token
     const id = func.getUserID();
 
     if (
@@ -45,7 +40,7 @@ module.exports = function (app) {
       musclegroup = user.preferences.musclegroup;
       type = user.preferences.type;
     } else {
-      res.send(`Please enter time, musclegroup, difficulty and type. 
+      res.json(`Please enter time, musclegroup, difficulty and type. 
       Otherwise, your preferences will be used.`);
     }
 
@@ -56,9 +51,7 @@ module.exports = function (app) {
     } else if (type === "tone") {
       numOfEx = time / 3.5; // time taken per exercise (3 sets, 12 reps, 30sec breaks, based on 3 sec per rep)
     } else {
-      console.log(
-        "Type of workout not valid. Please enter 'strength' or 'tone'."
-      );
+      res.json("Type of workout not valid. Please enter 'strength' or 'tone'.");
     }
 
     // fetch appropriate exercises from the db
@@ -95,7 +88,6 @@ module.exports = function (app) {
   });
 
   app.get("/workouts/saved", async function (req, res) {
-    console.log("Retrieving saved workouts");
     const id = req.query.id;
     let savedWorkouts = await WorkoutModel.find({ userId: id }).populate(
       "exercises"

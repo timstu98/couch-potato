@@ -1,25 +1,25 @@
 const UsersModel = require("../models/user");
 const bcrypt = require("bcrypt");
-
-const func = require("../functions.js");
+const func = require("../utilities/functions.js");
 const jwt = require("jsonwebtoken");
 
 module.exports = function (app) {
+  console.log("User routes set up");
   // to sign up:
   app.post("/signup", async (req, res) => {
-    console.log(req.body);
     if (!func.checkForBody(req, res)) return;
     const { username, password, email, admin } = req.body;
     // does username already exist in DB?
     const existingUser = await UsersModel.find({ username });
     if (existingUser.length !== 0) {
-      res.send("Username already exists, please use new username or login.");
+      res.json("Username already exists, please use a new username or login.");
     } //check password length
     if (password.length < 8) {
-      res.send("Password shall be at least 8 digits.");
+      res.json("Password should be at least 8 digits.");
     } else {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       //check password length
+
       // create user in DB
       let user = new UsersModel({
         username,
@@ -29,8 +29,7 @@ module.exports = function (app) {
       });
       user.save((err, results) => {
         if (err) {
-          console.log(err);
-          res.send(err);
+          res.json(err);
         } else {
           // send access token
           const accessToken = jwt.sign({ id: results._id }, func.JWT_SECRET);
@@ -50,7 +49,7 @@ module.exports = function (app) {
       const accessToken = jwt.sign({ id: user._id }, func.JWT_SECRET);
       res.json({ accessToken });
     } else {
-      res.json("Username or password incorrect");
+      res.json("Username or password incorrect.acefitness");
     }
   });
 
@@ -59,17 +58,16 @@ module.exports = function (app) {
     const user = await UsersModel.findOne({
       username: req.body.username,
     }).exec();
-    console.log(user);
     if (user == null) {
-      return res.status(400).send("Cannot find user");
+      return res.status(400).send("Cannot find user.");
     }
     try {
       const verify = await bcrypt.compare(req.body.password, user.password);
       console.log("This is" + verify);
       if (verify) {
-        res.send("Success");
+        res.json("Success!");
       } else {
-        res.send("Try again");
+        res.json("Try again.");
       }
     } catch {
       res.status(500).send();
@@ -96,11 +94,11 @@ module.exports = function (app) {
         { new: true },
         (err, result) => {
           if (err) {
-            res.send(
+            res.json(
               "Something went wrong when adding the user's preferences."
             );
           } else {
-            res.send(result);
+            res.json(result);
           }
         }
       );
@@ -125,7 +123,7 @@ module.exports = function (app) {
     }
   });
 
-  // Edits user information
+  // Edit user information
   app.put("/users", async function (req, res) {
     const tokenId = func.getUserID(req);
     const tokenUser = await UsersModel.find({ _id: tokenId });
@@ -152,7 +150,7 @@ module.exports = function (app) {
       id = tokenId;
       func.deleteUserDetails(id, req, res);
     } else {
-      res.json("You are not authorized to do this");
+      res.json("You are not authorized to do this.");
     }
   });
 

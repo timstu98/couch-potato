@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const UsersModel = require("./models/user");
+const UsersModel = require("../models/user");
 
 function checkForBody(req, res) {
   // null and undefined check
@@ -15,7 +15,7 @@ function checkForBody(req, res) {
   return true;
 }
 
-const JWT_SECRET = "password123";
+const JWT_SECRET = TOKEN_SECRET;
 
 const authJWT = (req, res, next) => {
   const auth = req.headers.authorization;
@@ -55,17 +55,15 @@ const getUserID = (req) => {
 const updateUserDetails = async (id, req, res) => {
   const { username, password, email, admin } = req.body;
   try {
-    console.log(username, password, email, admin);
-    console.log(id);
     await UsersModel.findByIdAndUpdate(
       { _id: id },
       { username, password, email, admin, _id: id },
       { new: true },
       (err, result) => {
         if (err) {
-          res.send("Something went wrong when updating the user's data!");
+          res.json("Something went wrong when updating the user's data!");
         } else {
-          res.send(req.body);
+          res.json(req.body);
         }
       }
     );
@@ -78,7 +76,7 @@ const deleteUserDetails = async (id, req, res) => {
   try {
     await UsersModel.findOneAndDelete({ _id: id }, function (err, docs) {
       if (err) {
-        res.send("Something went wrong, the user has not been deleted.");
+        res.json("Something went wrong, the user has not been deleted.");
       } else {
         res.json(`This user has been deleted.`);
       }
@@ -90,7 +88,6 @@ const deleteUserDetails = async (id, req, res) => {
 
 const getUserDetails = async (id, req, res) => {
   const result = await UsersModel.findById(id).exec();
-  console.log(result);
   try {
     res.json(result);
   } catch (error) {
