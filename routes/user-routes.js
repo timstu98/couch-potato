@@ -2,30 +2,32 @@ const UsersModel = require("../models/user");
 const bcrypt = require("bcrypt");
 const func = require("../utilities/functions");
 const jwt = require("jsonwebtoken");
+const validation = require("../controllers/loginController")
+const { validationResult } = require("express-validator");
+
 
 module.exports = function (app) {
   console.log("User routes set up");
 
   // Sign up
-  app.post("/signup", async (req, res) => {
-    if (!func.checkForBody(req, res)) return;
-    const { username, password, email, admin } = req.body;
+  app.post("/signup", validation.signup_user_post, async (req, res) => {
 
-    // Checks if username already exists in database
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { username, password, email, admin } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Check if username already exists in the database
     const existingUser = await UsersModel.find({ username });
     if (existingUser.length !== 0) {
       res.json("Username already exists, please use a new username or login.");
-    } 
-    
-    // Check password length is at least 8 digits
-    if (password.length < 8) {
-      res.json("Password should be at least 8 digits.");
-    } else {
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    }
 
-      // Create user in DB 
-      let user = new UsersModel({ 
-        username, password: hashedPassword, email, admin 
+    let user = new UsersModel({ 
+      username, password: hashedPassword, email, admin 
       });
       user.save((err, results) => {
         if (err) {
@@ -36,7 +38,7 @@ module.exports = function (app) {
         }
       });
     }
-  });
+  );
 
   // Log in 
   app.post("/login", async (req, res) => {

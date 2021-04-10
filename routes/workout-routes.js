@@ -36,14 +36,14 @@ module.exports = function (app) {
       musclegroup = user.preferences.musclegroup;
       type = user.preferences.type;
     } else {
-      res.json(`Please enter time, musclegroup, difficulty and type. 
-      Otherwise, your preferences will be used.`);
+      res.json(`Please specify time, musclegroup, difficulty and type. 
+      Otherwise, your saved preferences will be used.`);
     }
 
     // Calculate number of exercises
     let numOfEx;
     if (type === "strength") {
-      numOfEx = time / 5; // time taken per exercise (5 sets, 5 reps, 45sec breaks, based on 3 sec per rep)
+      numOfEx = time / 5; // Time taken per exercise (5 sets, 5 reps, 45sec breaks, based on 3 sec per rep)
     } else if (type === "tone") {
       numOfEx = time / 3.5; // time taken per exercise (3 sets, 12 reps, 30sec breaks, based on 3 sec per rep)
     } else {
@@ -75,7 +75,6 @@ module.exports = function (app) {
       });
     }
 
-    // output the exercises to the user
     try {
       res.json(output);
     } catch (error) {
