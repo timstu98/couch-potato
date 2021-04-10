@@ -75,11 +75,11 @@ const updateUserDetails = async (id, req, res) => {
 
 const deleteUserDetails = async (id, req, res) => {
   try {
-    await UsersModel.findOneAndDelete({ _id: id }, function (err, docs) {
+    await UsersModel.findOneAndDelete({ _id: id }, function (err, result) {
       if (err) {
         res.json("Something went wrong, the user has not been deleted.");
       } else {
-        res.json(`This user has been deleted.`);
+        res.json(`The user ${result.username} has been deleted.`);
       }
     });
   } catch (error) {

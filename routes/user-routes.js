@@ -1,37 +1,36 @@
 const UsersModel = require("../models/user");
 const bcrypt = require("bcrypt");
-const func = require("../utilities/functions.js");
+const func = require("../utilities/functions");
 const jwt = require("jsonwebtoken");
 
 module.exports = function (app) {
   console.log("User routes set up");
-  // to sign up:
+
+  // Sign up
   app.post("/signup", async (req, res) => {
     if (!func.checkForBody(req, res)) return;
     const { username, password, email, admin } = req.body;
-    // does username already exist in DB?
+
+    // Checks if username already exists in database
     const existingUser = await UsersModel.find({ username });
     if (existingUser.length !== 0) {
       res.json("Username already exists, please use a new username or login.");
-    } //check password length
+    } 
+    
+    // Check password length is at least 8 digits
     if (password.length < 8) {
       res.json("Password should be at least 8 digits.");
     } else {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
-      //check password length
 
-      // create user in DB
-      let user = new UsersModel({
-        username,
-        password: hashedPassword,
-        email,
-        admin,
+      // Create user in DB 
+      let user = new UsersModel({ 
+        username, password: hashedPassword, email, admin 
       });
       user.save((err, results) => {
         if (err) {
           res.json(err);
         } else {
-          // send access token
           const accessToken = jwt.sign({ id: results._id }, func.JWT_SECRET);
           res.json({ accessToken });
         }
@@ -39,22 +38,22 @@ module.exports = function (app) {
     }
   });
 
-  // to log in:
+  // Log in 
   app.post("/login", async (req, res) => {
-    const user = await UsersModel.findOne({
-      username: req.body.username,
-    }).exec();
+    const username = req.body.username;
+    const password = req.body.password;
+    const user = await UsersModel.findOne({ username: username }).exec();
     if (user == null) {
       return res.status(400).send("Cannot find user.");
     }
     try {
-      const verify = await bcrypt.compare(req.body.password, user.password);
-      console.log("This is " + verify);
+      const verify = await bcrypt.compare(password, user.password);
       if (verify) {
+        console.log(`${user.username} has successfully logged in.`)
         const accessToken = jwt.sign({ id: user._id }, func.JWT_SECRET);
         res.json({ accessToken });
       } else {
-        res.json("Username or password incorrect. Try again.");
+        res.json("Username or password incorrect. Please try again.");
       }
     } catch {
       res.status(500).send();
@@ -85,7 +84,8 @@ module.exports = function (app) {
               "Something went wrong when adding the user's preferences."
             );
           } else {
-            res.json(result);
+            console.log(`Preferences have been updated for ${result.username}`)
+            res.json(result.preferences);
           }
         }
       );
@@ -94,24 +94,26 @@ module.exports = function (app) {
 
   // Gets user information
   app.get("/users", async function (req, res) {
-    const tokenId = func.getUserID(req); // gets user id from token
+
+    const tokenId = func.getUserID(req); 
     const tokenUser = await UsersModel.find({ _id: tokenId });
     let id = req.query.id;
 
     // Allow admin to list any users
     if (id !== undefined && tokenUser[0].admin === true) {
       func.getUserDetails(id, req, res);
-      // Allow non-admin user to list own details
+    // Allow non-admin user to list only own details
     } else if (id === undefined) {
       id = tokenId;
       func.getUserDetails(id, req, res);
     } else {
-      res.json("You are not authorized to do this");
+      res.json("You are not authorized to do this.");
     }
   });
 
   // Edit user information
   app.put("/users", async function (req, res) {
+
     const tokenId = func.getUserID(req);
     const tokenUser = await UsersModel.find({ _id: tokenId });
     let id = req.query.id;
@@ -119,20 +121,26 @@ module.exports = function (app) {
     // Allow admin to update any users
     if (id !== undefined && tokenUser[0].admin === true) {
       func.updateUserDetails(id, req, res);
-      // Allow non-admin user to update own details
+    // Non-admin user can only update own details
     } else if (id === undefined) {
       id = tokenId;
       func.updateUserDetails(id, req, res);
     } else {
-      res.json("You are not authorized to do this");
+      res.json("You are not authorized to do this.");
     }
   });
 
-  // Allow admin to delete any users
+  // Delete user
   app.delete("/users", async function (req, res) {
+
+    const tokenId = func.getUserID(req);
+    const tokenUser = await UsersModel.find({ _id: tokenId });
+    let id = req.query.id;
+    
+    // Admin can delete any users
     if (id !== undefined && tokenUser[0].admin === true) {
       func.deleteUserDetails(id, req, res);
-      // Allow non-admin user to delete own details
+    // Non-admin user can only delete own details
     } else if (id === undefined) {
       id = tokenId;
       func.deleteUserDetails(id, req, res);
@@ -141,7 +149,7 @@ module.exports = function (app) {
     }
   });
 
-  // Gets all users information
+  // Gets all users information (admin only)
   app.get("/users/all", func.requireAdmin, async function (req, res) {
     const all = await UsersModel.find();
     try {

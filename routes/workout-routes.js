@@ -2,7 +2,6 @@ const ExerciseModel = require("../models/exercise");
 const UserModel = require("../models/user");
 const WorkoutModel = require("../models/workout");
 const func = require("../utilities/functions");
-const jwt = require("jsonwebtoken");
 
 module.exports = function (app) {
   console.log("Workout routes set up");
@@ -23,17 +22,14 @@ module.exports = function (app) {
 
     const id = func.getUserID(req);
 
-    if (
-      req.query.time &&
-      req.query.musclegroup &&
-      req.query.difficulty &&
-      req.query.type
-    ) {
+    if (req.query.time && req.query.musclegroup && req.query.difficulty && req.query.type) {
+      console.log("A workout will be generated using specified preferences.")
       time = req.query.time;
       musclegroup = req.query.musclegroup;
       difficulty = req.query.difficulty;
       type = req.query.type;
     } else if (id) {
+      console.log("A workout will be generated using saved preferences.")
       let user = await UserModel.findById({ _id: id });
       time = user.preferences.time;
       difficulty = user.preferences.difficulty;
@@ -44,7 +40,7 @@ module.exports = function (app) {
       Otherwise, your preferences will be used.`);
     }
 
-    // calculating how many exercises to fetch:
+    // Calculate number of exercises
     let numOfEx;
     if (type === "strength") {
       numOfEx = time / 5; // time taken per exercise (5 sets, 5 reps, 45sec breaks, based on 3 sec per rep)
@@ -54,27 +50,27 @@ module.exports = function (app) {
       res.json("Type of workout not valid. Please enter 'strength' or 'tone'.");
     }
 
-    // fetch appropriate exercises from the db
+    // Fetch appropriate exercises from the database
     let exercises = await ExerciseModel.find({
-      musclegroup: musclegroup[0].toUpperCase() + musclegroup.substring(1), // have to make first letter lower case
+      musclegroup: musclegroup[0].toUpperCase() + musclegroup.substring(1), 
       difficulty: difficulty[0].toUpperCase() + difficulty.substring(1),
     });
 
-    // select number of random exercises to output
+    // Select appropriate number of random exercises
     let indexes = func.randNums(numOfEx, exercises.length);
     let output = [];
     for (let i = 0; i < indexes.length; i++) {
       output.push(exercises[indexes[i]]);
     }
 
-    // save workouts
+    // Save workouts
     if (saveWorkout === "true") {
       let savedWorkout = new WorkoutModel({ userId: id, exercises: output });
       savedWorkout.save((err) => {
         if (err) {
           console.log(err);
         } else {
-          console.log("Workout saved");
+          console.log("Workout saved.");
         }
       });
     }
@@ -89,9 +85,7 @@ module.exports = function (app) {
 
   app.get("/workouts/saved", async function (req, res) {
     const id = func.getUserID(req);
-    let savedWorkouts = await WorkoutModel.find({ userId: id }).populate(
-      "exercises"
-    );
+    let savedWorkouts = await WorkoutModel.find({ userId: id }).populate("exercises");
     try {
       res.json(savedWorkouts);
     } catch (error) {

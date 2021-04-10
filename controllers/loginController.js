@@ -4,29 +4,29 @@ const { validationResult } = require("express-validator");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const { sanitizeBody } = require("express-validator/filter");
+const { log } = require("async");
 
-exports.signup_user_post = [
-  // Validate fields.
-  body("username", "username must not be empty.").isLength({ min: 1 }).trim(),
-  // password must be at least 8 chars long
+// Sign in validation
+const signup_user_post = [
+  body("username", "Username must not be empty.")
+    .isLength({ min: 1 }).trim(),
   body("password")
     .isLength({ min: 8 })
-    .withMessage("Password must be at least 8 chars long"),
+    .withMessage("Password must be at least 8 characters long."),
 
-  //Sanitize fields.
+  // Sanitize username field
   sanitizeBody("username").escape(),
 
   (req, res) => {
-    //Extract validation errors from request
+    // Extract validation errors from request
     const errors = validationResult(req);
-
     if (!errors.isEmpty()) {
-      res.send("data failed validation");
+      res.send("Data failed validation.");
     }
   },
 ];
 
-exports.login_user_post = [
+const login_user_post = [
   passport.authenticate("local", { session: false }),
   function (req, res) {
     const token = jwt.sign({ id: req.user._id.toJSON() }, process.env.SECRET, {
@@ -43,3 +43,6 @@ exports.login_user_post = [
     });
   },
 ];
+
+exports.login_user_post = login_user_post;
+exports.signup_user_post = signup_user_post;

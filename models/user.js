@@ -10,8 +10,7 @@ const UserSchema = new Schema({
     time: { type: Number },
     musclegroup: {
       type: String,
-      enum: ["Upperbody", "Lowerbody", "Core"],
-      default: "Upperbody",
+      enum: ["Upperbody", "Lowerbody", "Core"]
     },
     difficulty: {
       type: String,
