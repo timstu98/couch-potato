@@ -46,7 +46,7 @@ module.exports = function (app) {
     const password = req.body.password;
     const user = await UsersModel.findOne({ username: username }).exec();
     if (user == null) {
-      return res.status(400).send("Cannot find user.");
+      return res.status(400).send("Username or password incorrect. Please try again.");
     }
     try {
       const verify = await bcrypt.compare(password, user.password);

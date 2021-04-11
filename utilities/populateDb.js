@@ -23,7 +23,7 @@ function deleteExercises() {
   console.log("Deleted exercises");
 }
 
-function createExercise(name, musclegroup, link, difficulty, cb) {
+function createExercise(name, musclegroup, link, difficulty, callback) {
   let exerciseDetail = { name, musclegroup, link, difficulty };
 
   let exercise = new Exercise(exerciseDetail);

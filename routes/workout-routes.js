@@ -57,7 +57,7 @@ module.exports = function (app) {
     });
 
     // Select appropriate number of random exercises
-    let indexes = func.randNums(numOfEx, exercises.length);
+    let indexes = func.randNums(numOfEx, exercises.length-1);
     let output = [];
     for (let i = 0; i < indexes.length; i++) {
       output.push(exercises[indexes[i]]);

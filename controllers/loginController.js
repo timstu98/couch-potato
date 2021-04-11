@@ -11,7 +11,7 @@ const signup_user_post = [
   body("username", "Username must not be empty.")
     .isLength({ min: 1 }).trim(),
   body("password").isLength({ min: 8 }).withMessage("Password must be at least 8 characters long."),
-  body("email").isEmail(),
+  body("email").isEmail().withMessage("Email is not valid."),
 
   // Sanitize username field
   sanitizeBody("username").escape()
