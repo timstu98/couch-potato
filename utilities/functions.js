@@ -26,7 +26,6 @@ const authJWT = (req, res, next) => {
     jwt.verify(token, JWT_SECRET, (err, user) => {
       if (err) res.sendStatus(403);
       req.user = user;
-      next();
     });
   } else {
     res.status(401).json("Please add an authorisation token.");
@@ -40,6 +39,7 @@ const requireAdmin = async (req, res, next) => {
   if (user.admin !== true) {
     res.json("Admins only.")
   }
+  next();
 };
 
 function randNums(numOfEx, lengthOfArray) {
