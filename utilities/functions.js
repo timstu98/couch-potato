@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const UsersModel = require("../models/user");
+const bcrypt = require("bcrypt");
 require("dotenv").config({ path: __dirname + "/../.env" });
 
 function checkForBody(req, res) {
@@ -28,13 +29,17 @@ const authJWT = (req, res, next) => {
       next();
     });
   } else {
-    res.sendStatus(401);
+    res.status(401).json("Please add an authorisation token.");
   }
 };
 
-const requireAdmin = (req, res, next) => {
+const requireAdmin = async (req, res, next) => {
   authJWT(req, res, next);
-  if (req.user.admin === true) res.status(401).json("Admins only.");
+  let user = await UsersModel.findById(req.user.id);
+  console.log(user.admin)
+  if (user.admin !== true) {
+    res.json("Admins only.")
+  }
 };
 
 function randNums(numOfEx, lengthOfArray) {
@@ -55,16 +60,17 @@ const getUserID = (req) => {
 
 const updateUserDetails = async (id, req, res) => {
   const { username, password, email, admin } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
   try {
     await UsersModel.findByIdAndUpdate(
       { _id: id },
-      { username, password, email, admin, _id: id },
+      { username, password: hashedPassword, email, admin, _id: id },
       { new: true },
-      (err, result) => {
+      (err, results) => {
         if (err) {
           res.json("Something went wrong when updating the user's data!");
         } else {
-          res.json(req.body);
+          res.json(results);
         }
       }
     );
