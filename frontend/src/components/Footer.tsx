@@ -1,10 +1,8 @@
-import {
-  FaFacebookSquare,
-  FaTwitterSquare,
-  FaInstagramSquare,
-} from 'react-icons/fa';
+import React from 'react';
 
-const Footer = () => {
+import { FaFacebookSquare, FaTwitterSquare, FaInstagramSquare } from 'react-icons/fa';
+
+const Footer = (): JSX.Element => {
   return (
     <div>
       <div>

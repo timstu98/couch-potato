@@ -1,3 +1,4 @@
+import React from 'react';
 const NavBar = (): JSX.Element => {
   // ToDo: Add dynamic functionality to nav bar to display sign up login or logout potentially through props
   return (
