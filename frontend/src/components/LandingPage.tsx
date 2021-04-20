@@ -1,7 +1,7 @@
 import NavBar from './NavBar';
 import Footer from './Footer';
 
-const LandingPage = () => {
+const LandingPage = (): JSX.Element => {
   return (
     <div>
       <NavBar />
