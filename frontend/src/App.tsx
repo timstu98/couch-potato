@@ -1,11 +1,11 @@
-import WorkoutGenerator from "./components/WorkoutGenerator"
+import WorkoutGenerator from './components/WorkoutGenerator';
 
 const App = (): JSX.Element => {
   return (
-    <div className="App">
+    <div className='App'>
       <WorkoutGenerator />
     </div>
   );
-}
+};
 
 export default App;

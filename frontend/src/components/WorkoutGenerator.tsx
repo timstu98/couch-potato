@@ -1,10 +1,11 @@
+import LandingPage from './LandingPage';
 
 const WorkoutGenerator = (): JSX.Element => {
-    return (
-        <div>
-            <h1>Hello World</h1>
-        </div>
-    )
-}
+  return (
+    <div>
+      <LandingPage />
+    </div>
+  );
+};
 
-export default WorkoutGenerator
+export default WorkoutGenerator;
