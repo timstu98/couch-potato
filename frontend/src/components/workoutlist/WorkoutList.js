@@ -1,8 +1,11 @@
-import React from 'react';
-import './workoutlist.css';
+import "./workoutlist.css"
 
 const WorkoutList = () => {
-  return <div></div>;
-};
+    return (
+        <div>
+            
+        </div>
+    )
+}
 
-export default WorkoutList;
+export default WorkoutList
