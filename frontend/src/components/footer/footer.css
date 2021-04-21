@@ -1,0 +1,21 @@
+.footer {
+    background-color: #050038;
+    color: white;
+    margin-top: auto;
+    padding: 0 20% 2rem;
+}
+
+.footer img {
+    height: 2rem;
+    width: auto;
+    margin-right: 1rem;
+}
+
+.footerTop {
+    padding: 1rem 0;
+}
+
+.footerList {
+    columns: 2;
+    list-style-type: none;
+}

@@ -1,0 +1,41 @@
+.innerNav {
+    margin: 0 20%;
+    color: white;
+}
+
+.navBar {
+    background-color: #0071A7;
+}
+
+.navBar h1 {
+    font-family: Caveat, cursive;
+    font-weight: normal;
+}
+
+.navBar ul {
+    list-style-type: none;
+    padding: 0.5rem 0;
+    overflow: hidden;
+  }
+
+.navBar li {
+    float: left;
+    display: block;
+    text-decoration: none;
+}  
+
+.navBar .logInBtns {
+    float: right;
+    padding: auto;
+    text-align: center
+}
+
+.navBar .logInBtns a {
+    text-decoration: none;
+    margin: 1rem;
+    color: white;
+}
+
+.navBar .logInBtns .logIn {
+    font-weight: bold;
+}
