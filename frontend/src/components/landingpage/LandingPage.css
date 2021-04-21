@@ -1,0 +1,5 @@
+.bg-gym {
+  background-image: url("../../images/gym.png");
+  min-height: 40vh;
+  background-position: center;
+}
