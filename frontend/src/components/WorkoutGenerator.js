@@ -21,12 +21,12 @@ const WorkoutGenerator = () => {
 
   // Sign Up
   const signUp = async (newUser) => {
-    const res = await fetch('http://localhost:5000/signup', {
+    const res = await fetch('/signup', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
       },
-      body: JSON.stringify(task),
+      body: JSON.stringify(newUser),
     });
 
     const data = await res.json();
@@ -35,13 +35,13 @@ const WorkoutGenerator = () => {
 
   return (
     <Router>
-      <Switch>
-        <div>
+      <div>
+        <Switch>
           <Route path='/' exact render={(props) => <LandingPage />} />
           <Route path='/login' exact render={(props) => <Login onLogin={login} />} />
           <Route path='/signup' exact render={(props) => <SignUp onSignUp={signUp} />} />
-        </div>
-      </Switch>
+        </Switch>
+      </div>
     </Router>
   );
 };

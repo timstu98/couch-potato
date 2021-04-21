@@ -6,7 +6,7 @@ const SignUp = ({ onSignUp }) => {
   const defaultValues = {
     username: '',
     password: '',
-    confirmPassword: '',
+    // confirmPassword: '',
     email: '',
   };
 
@@ -18,7 +18,10 @@ const SignUp = ({ onSignUp }) => {
   } = useForm({ defaultValues });
 
   const onSubmit = (newUser) => {
-    onSignUp(newUser);
+    const admin = false;
+    const user = { ...newUser, admin };
+    console.log(user);
+    onSignUp(user);
     reset(defaultValues);
   };
 
@@ -49,7 +52,7 @@ const SignUp = ({ onSignUp }) => {
           {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
         </div>
 
-        <div>
+        {/* <div>
           <label htmlFor='confirmpassword'>Confirm Password</label>
           <input
             id='confirmpassword'
@@ -59,7 +62,7 @@ const SignUp = ({ onSignUp }) => {
             })}
           />
           {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
-        </div>
+        </div> */}
 
         <div>
           <label htmlFor='email'>Email</label>
