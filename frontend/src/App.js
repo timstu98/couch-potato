@@ -1,21 +1,15 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import WorkoutGenerator from './components/WorkoutGenerator';
+import AppState from './context/AppState';
 import './App.css';
-import Navbar from './components/navbar/Navbar';
-import Footer from './components/footer/Footer';
-import LandingPage from './components/landingpage/LandingPage';
 
 function App() {
   return (
-    <Router>
+    <AppState>
       <div className='App'>
-        <Navbar />
-        <Switch>
-          <Route path='/' component={LandingPage} />
-        </Switch>
-        <Footer />
+        <WorkoutGenerator />
       </div>
-    </Router>
+    </AppState>
   );
 }
 
