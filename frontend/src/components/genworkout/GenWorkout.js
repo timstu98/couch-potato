@@ -1,7 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 const GenWorkout = () => {
+  useEffect(async () => {
+    try {
+      const res = await fetch(`/workouts`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `token ${localStorage.getItem('accessToken')}`,
+        },
+      });
+
+      const data = await res.json();
+      setWorkout(data);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
   const {
     register,
     handleSubmit,
@@ -24,6 +41,7 @@ const GenWorkout = () => {
 
       const data = await res.json();
       setWorkout(data);
+      console.log(data);
     } catch (error) {
       console.log(error);
     } finally {
