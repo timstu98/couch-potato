@@ -7,6 +7,7 @@ import {
   LOGOUT_SUCCESS,
   SIGNUP_SUCCESS,
   SIGNUP_FAILURE,
+  PREFERENCES_CHANGED,
 } from '../actions/types';
 
 export default function reducer(state, action) {
@@ -27,7 +28,6 @@ export default function reducer(state, action) {
     case LOGIN_SUCCESS:
     case SIGNUP_SUCCESS:
       localStorage.setItem('accessToken', action.payload.accessToken);
-      console.log(action);
       return {
         ...state,
         ...action.payload,
@@ -45,6 +45,14 @@ export default function reducer(state, action) {
         user: null,
         isAuthenticated: false,
         isLoading: false,
+      };
+    case PREFERENCES_CHANGED:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          preferences: action.payload,
+        },
       };
 
     default:

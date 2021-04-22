@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router';
 import { loadWorkouts } from '../context/actions/workouts';
 import AppContext from '../context/app-context';
 import GenWorkout from './genworkout/GenWorkout';
+import UserPreferences from './userpreferences/UserPreferences';
 
 const AuthenticatedRoutes = () => {
   const { dispatch } = useContext(AppContext);
@@ -10,9 +11,12 @@ const AuthenticatedRoutes = () => {
     dispatch(loadWorkouts());
   }, []);
   return (
-    <Switch>
-      <Route path='/' component={GenWorkout} />
-    </Switch>
+    <>
+      <Switch>
+        <Route exact path='/' component={GenWorkout} />
+        <Route path='/preferences' component={UserPreferences} />
+      </Switch>
+    </>
   );
 };
 

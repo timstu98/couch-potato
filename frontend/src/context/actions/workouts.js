@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { WORKOUTS_LOADED, WORKOUTS_LOADING } from './types';
+import { WORKOUTS_LOADED, WORKOUTS_LOADING, PREFERENCES_CHANGED } from './types';
 import { tokenConfig } from '../utils';
 
 // Check token & load workouts
@@ -29,22 +29,22 @@ export const loadWorkouts = (formValues) => (dispatch, getState) => {
     });
 };
 
-const onSubmit = async (formValues) => {
-  const query = `?musclegroup=${formValues.musclegroup}&difficulty=${formValues.difficulty}&type=${formValues.type}&time=${formValues.time}&saveworkout=false`;
-  try {
-    const res = await fetch(`/workouts${query}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `token ${localStorage.getItem('accessToken')}`,
-      },
-    });
+// Check token & change preferences
+export const changePreferences = (formValues) => (dispatch, getState) => {
+  // Request Body
+  const body = JSON.stringify(formValues);
 
-    const data = await res.json();
-    setWorkout(data);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    reset();
-  }
+  axios
+    .post('/users/preferences', body, tokenConfig(getState))
+    .then((res) => {
+      dispatch(loadWorkouts());
+      dispatch({ type: PREFERENCES_CHANGED, payload: res.data });
+    })
+    .catch((err) => {
+      console.log(err);
+      // returnErrors(err.response.data, err.response.status);
+      // dispatch({
+      //   type: AUTH_ERROR,
+      // });
+    });
 };

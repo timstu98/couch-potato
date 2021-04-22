@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { changePreferences } from '../../context/actions/workouts';
+import AppContext from '../../context/app-context';
 
 const UserPreferences = () => {
   const {
@@ -9,23 +11,11 @@ const UserPreferences = () => {
     formState: { errors },
   } = useForm({ mode: 'all' });
 
-  const onSubmit = async (formValues) => {
-    try {
-      const res = await fetch(`/users/preferences`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `token ${localStorage.getItem('accessToken')}`,
-        },
-        body: JSON.stringify(formValues),
-      });
+  const { dispatch } = useContext(AppContext);
 
-      const data = await res.json();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      reset();
-    }
+  const onSubmit = async (formValues) => {
+    dispatch(changePreferences(formValues));
+    reset();
   };
 
   return (

@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import './navbar.css';
-import { NavLink, Link } from 'react-router-dom';
-import { logout } from '../../context/actions/auth';
+import { NavLink } from 'react-router-dom';
 import AppContext from '../../context/app-context';
 import { LOGOUT_SUCCESS } from '../../context/actions/types';
 
@@ -22,6 +21,9 @@ const Navbar = () => {
             <ul role='list'>
               {!!isAuthenticated ? (
                 <>
+                  <li>
+                    <NavLink to='/preferences'>Preferences</NavLink>
+                  </li>
                   <li>
                     <button id='logOutBtn' type='button' onClick={() => dispatch({ type: LOGOUT_SUCCESS })}>
                       Logout
