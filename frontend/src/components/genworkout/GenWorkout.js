@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import AppContext from '../../context/app-context';
 import { loadWorkouts } from '../../context/actions/workouts';
+import './genworkout.css';
 
 const GenWorkout = () => {
   const {
@@ -19,11 +20,11 @@ const GenWorkout = () => {
   };
 
   return (
-    <div>
+    <div className='genWorkoutForm'>
       <fieldset>
         <legend>Generate Workout</legend>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div>
+          <div className='formInput formWrapper'>
             <label htmlFor='musclegroup'>Muscle Group</label>
             <select id='musclegroup' {...register('musclegroup')}>
               <option value='upperbody'>Upper Body</option>
@@ -32,7 +33,7 @@ const GenWorkout = () => {
             </select>
           </div>
 
-          <div>
+          <div className='formInput formWrapper'>
             <label htmlFor='difficulty'>Difficulty</label>
             <select id='difficulty' {...register('difficulty')}>
               <option value='beginner'>Beginner</option>
@@ -41,7 +42,7 @@ const GenWorkout = () => {
             </select>
           </div>
 
-          <div>
+          <div className='formInput formWrapper'>
             <label htmlFor='type'>Type</label>
             <select id='type' {...register('type')}>
               <option value='strength'>Strength</option>
@@ -49,22 +50,23 @@ const GenWorkout = () => {
             </select>
           </div>
 
-          <div>
-            <input
-              id='time'
-              placeholder='Enter workout length (minutes)'
-              type='number'
-              {...register('time', {
-                required: 'Please enter your workout length in minutes',
-                max: {
-                  value: 120,
-                  message: 'Max value 120 minutes',
-                },
-              })}
-            />
+          <div className='formInput'>
+            <div className='formWrapper'>
+              <input
+                id='time'
+                placeholder='Enter workout length (minutes)'
+                type='number'
+                {...register('time', {
+                  required: 'Please enter your workout length in minutes',
+                  max: {
+                    value: 120,
+                    message: 'Max value 120 minutes',
+                  },
+                })}
+              />
+            </div>
+            {errors.time && <span style={{ color: 'red' }}>{errors.time.message}</span>}
           </div>
-
-          {errors.time && <span style={{ color: 'red' }}>{errors.time.message}</span>}
 
           <button type='submit'>Generate Workout</button>
         </form>

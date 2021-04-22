@@ -1,0 +1,8 @@
+.genWorkoutForm select {
+    min-width: 120px
+}
+
+.genWorkoutForm input {
+    height: 21px;
+    width: 286px;
+}
