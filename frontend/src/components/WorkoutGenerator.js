@@ -20,7 +20,6 @@ const WorkoutGenerator = () => {
   return (
     <Router>
       <NavBar />
-
       <div className='landingMain'>
         <Switch>
           <Route path='/login' exact component={Login} />

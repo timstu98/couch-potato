@@ -115,7 +115,7 @@ export const signUp = ({ username, email, password }) => (dispatch) => {
 // Logout User
 export const logout = () => (dispatch, getState) => {
   axios
-    .post('/logout/', null, tokenConfig(getState))
+    .post('/logout', null, tokenConfig(getState))
     .then((res) => {
       dispatch({
         type: LOGOUT_SUCCESS,

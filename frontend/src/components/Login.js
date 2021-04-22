@@ -4,8 +4,6 @@ import { login } from '../context/app-actions';
 import AppContext from '../context/app-context';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import Navbar from './navbar/Navbar';
-import Footer from './footer/Footer';
 
 const Login = () => {
   const { dispatch, isAuthenticated } = useContext(AppContext);
@@ -26,7 +24,6 @@ const Login = () => {
     <Redirect to='/' />
   ) : (
     <div>
-      <Navbar />
       <fieldset>
         <legend>Login</legend>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -79,7 +76,6 @@ const Login = () => {
           </button>
         </form>
       </fieldset>
-      <Footer />
     </div>
   );
 };
