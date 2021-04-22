@@ -5,21 +5,14 @@ import Navbar from './navbar/Navbar';
 import Footer from './footer/Footer';
 
 const SignUp = () => {
-  const defaultValues = {
-    username: '',
-    password: '',
-    email: '',
-  };
-
+  const [message, setMessage] = useState();
+  const history = useHistory();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ defaultValues });
-
-  const [message, setMessage] = useState();
-  const history = useHistory();
+  } = useForm({ mode: 'all' });
 
   const onSubmit = async (formValues, e) => {
     const newUser = { ...formValues, admin: false };
@@ -53,7 +46,7 @@ const SignUp = () => {
         type: 'alert-danger',
       });
     } finally {
-      reset(defaultValues);
+      reset();
     }
   };
 
