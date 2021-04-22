@@ -4,3 +4,22 @@
     min-height: 100vh;
     width: 100vw;
 }
+
+button {
+    padding: 1rem;
+    margin: 1rem;
+    background-color: #0071A7;
+    outline-width: 0.3rem;
+    outline-color: #0071A7;
+    outline-style: solid;
+    border: none;
+    font-weight: bold;
+    font-size: 1em;
+    color: white;
+    min-width: 100px;
+    text-align: center;
+}
+
+button:hover {
+    background-color: #009FC6;
+}
