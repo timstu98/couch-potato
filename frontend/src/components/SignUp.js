@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Link } from 'react-router-dom';
 import AppContext from '../context/app-context';
-import { signUp } from '../context/app-actions';
+import { signUp } from '../context/actions/auth';
 
 const SignUp = () => {
   const defaultValues = {
