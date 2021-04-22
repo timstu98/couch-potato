@@ -57,7 +57,7 @@ const Login = () => {
                 id='password'
                 type='password'
                 aria-describedby='Enter password'
-                placeholder='Password'
+                placeholder='Enter password'
                 {...register('password', {
                   required: 'Please enter a password',
                   minLength: {
