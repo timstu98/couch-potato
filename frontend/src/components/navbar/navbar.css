@@ -41,6 +41,22 @@
     font-weight: bold;
 }
 
+.navBar a {
+    text-decoration: none;
+    color: white;
+  }
+
+#logOutBtn {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+#logOutBtn:hover {
+    background-color: inherit;
+    cursor: pointer;
+}
+
 /* .navBar .logInBtns:hover {
     background-color: orange;
 } */

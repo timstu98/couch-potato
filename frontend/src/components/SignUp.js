@@ -54,72 +54,78 @@ const SignUp = () => {
       <fieldset>
         <legend>Sign Up</legend>
         <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete='off'>
-          <div>
-            <label htmlFor='username'>Username</label>
-            <input
-              id='username'
-              aria-describedby='Enter a username'
-              placeholder='Enter a username'
-              {...register('username', {
-                required: 'Please enter a username',
-                minLength: {
-                  value: 6,
-                  message: 'Minimum 6 characters are allowed',
-                },
-                maxLength: {
-                  value: 255,
-                  message: 'Maximum 255 characters are allowed',
-                },
-              })}
-            />
+          <div className='formInput'>
+            <div className='formWrapper'>
+              <label htmlFor='username'>Username</label>
+              <input
+                id='username'
+                aria-describedby='Enter a username'
+                placeholder='Enter a username'
+                {...register('username', {
+                  required: 'Please enter a username',
+                  minLength: {
+                    value: 6,
+                    message: 'Minimum 6 characters are allowed',
+                  },
+                  maxLength: {
+                    value: 255,
+                    message: 'Maximum 255 characters are allowed',
+                  },
+                })}
+              />
+            </div>
             {errors.username && <span style={{ color: 'red' }}>{errors.username.message}</span>}
           </div>
 
-          <div>
-            <label htmlFor='password'>Password</label>
-            <input
-              id='password'
-              type='password'
-              aria-describedby='Enter a password'
-              placeholder='Enter a password'
-              {...register('password', {
-                required: 'Please enter a password',
-                minLength: {
-                  value: 6,
-                  message: 'Minimum 6 characters are allowed',
-                },
-                maxLength: {
-                  value: 255,
-                  message: 'Maximum 255 characters are allowed',
-                },
-              })}
-            />
+          <div className='formInput'>
+            <div className='formWrapper'>
+              <label htmlFor='password'>Password</label>
+              <input
+                id='password'
+                type='password'
+                aria-describedby='Enter a password'
+                placeholder='Enter a password'
+                {...register('password', {
+                  required: 'Please enter a password',
+                  minLength: {
+                    value: 6,
+                    message: 'Minimum 6 characters are allowed',
+                  },
+                  maxLength: {
+                    value: 255,
+                    message: 'Maximum 255 characters are allowed',
+                  },
+                })}
+              />
+            </div>
             {errors.password && <span style={{ color: 'red' }}>{errors.password.message}</span>}
           </div>
 
-          <div>
-            <label htmlFor='email'>Email</label>
-            <input
-              id='email'
-              aria-describedby='Enter email address'
-              type='text'
-              placeholder='Enter email address'
-              {...register('email', {
-                required: 'Please enter your email address',
-                pattern: {
-                  value: /^\S+@\S+$/i,
-                  message: 'Enter a valid email address',
-                },
-                minLength: {
-                  value: 6,
-                  message: 'Minimum 6 characters are allowed',
-                },
-                maxLength: {
-                  value: 255,
-                  message: 'Maximum 255 characters are allowed',
-                },
-              })}
-            />
+          <div className='formInput'>
+            <div className='formWrapper'>
+              <label htmlFor='email'>Email</label>
+              <input
+                id='email'
+                aria-describedby='Enter email address'
+                type='text'
+                placeholder='Enter email address'
+                {...register('email', {
+                  required: 'Please enter your email address',
+                  pattern: {
+                    value: /^\S+@\S+$/i,
+                    message: 'Enter a valid email address',
+                  },
+                  minLength: {
+                    value: 6,
+                    message: 'Minimum 6 characters are allowed',
+                  },
+                  maxLength: {
+                    value: 255,
+                    message: 'Maximum 255 characters are allowed',
+                  },
+                })}
+              />
+            </div>
             {errors.email && <span style={{ color: 'red' }}>{errors.email.message}</span>}
           </div>
 

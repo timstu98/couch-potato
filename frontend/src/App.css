@@ -9,17 +9,48 @@ button {
     padding: 1rem;
     margin: 1rem;
     background-color: #0071A7;
-    outline-width: 0.3rem;
+    /* outline-width: 0.3rem;
     outline-color: #0071A7;
-    outline-style: solid;
+    outline-style: solid; */
     border: none;
     font-weight: bold;
     font-size: 1em;
     color: white;
     min-width: 100px;
     text-align: center;
+    border-radius: 10px;
 }
 
 button:hover {
     background-color: #009FC6;
+}
+
+button a {
+    color: white;
+    text-decoration: none;
+}
+
+fieldset {
+    background-color: rgba(255, 255, 255, 0.6);
+    margin: 6rem 20% 0;
+    border: none;
+    padding: 1rem;
+}
+
+fieldset legend {
+    color: black;
+    font-family: Caveat, cursive;
+    font-size: 5em;
+}
+
+.formInput {
+    padding-left: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+.formWrapper {
+    width: 270px;
+    display: flex;
+    justify-content: space-between;
+
 }
