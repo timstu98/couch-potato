@@ -55,7 +55,7 @@ module.exports = function (app) {
         const accessToken = jwt.sign({ id: user._id }, func.JWT_SECRET);
         res.json({ user, accessToken });
       } else {
-        res.json("Username or password incorrect. Please try again.");
+        res.status(400).send("Username or password incorrect. Please try again.");
       }
     } catch {
       res.status(500).send();
