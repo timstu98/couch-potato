@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import './navbar.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { logout } from '../../context/app-actions';
 import AppContext from '../../context/app-context';
 import { LOGOUT_SUCCESS } from '../../context/app-types';
@@ -13,7 +13,9 @@ const Navbar = () => {
       <header className='innerNav'>
         <ul>
           <li>
-            <h1>Just Go With Fit</h1>
+            <NavLink to='/'>
+              <h1>Just Go With Fit</h1>
+            </NavLink>
           </li>
           <li className='logInBtns'>
             <ul role='list'>

@@ -8,6 +8,7 @@ import PrivateRoute from './PrivateRoute';
 import NavBar from './navbar/Navbar';
 import Footer from './footer/Footer';
 import LandingContent from './landingcontent/LandingContent';
+import GenWorkout from './genworkout/GenWorkout';
 
 const WorkoutGenerator = () => {
   const { user, isAuthenticated, isLoading, dispatch } = useContext(AppContext);
@@ -22,10 +23,11 @@ const WorkoutGenerator = () => {
       <NavBar />
       <div className='landingMain'>
         <Switch>
+          <Route path='/' exact component={LandingContent} />
           <Route path='/login' exact component={Login} />
           <Route path='/signup' exact component={SignUp} />
           <PrivateRoute path='/' isAuthenticated={isAuthenticated}>
-            <LandingContent />
+            <GenWorkout />
           </PrivateRoute>
         </Switch>
       </div>

@@ -1,11 +1,7 @@
-import "./signupcontent.css"
+// import './signupcontent.css';
 
-const signUpContent = () => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
+// const signUpContent = () => {
+//   return <div></div>;
+// };
 
-export default signUpContent
+// export default signUpContent;

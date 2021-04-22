@@ -8,10 +8,10 @@ const LandingContent = () => {
       <h1>Are you ready for something more?</h1>
       <h3>bespoke workout routines built for you from your preferences</h3>
       <div className='landingButtons'>
-        <Link>
-          <button type='button'>Signup</button>
+        <Link to='/signup'>
+          <button type='button'>Sign Up</button>
         </Link>
-        <Link>
+        <Link to='/login'>
           <button type='button'>Login</button>
         </Link>
       </div>

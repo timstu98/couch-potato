@@ -1,6 +1,6 @@
 .landingMain {
-    background-image: url("gym-background.jpg"), linear-gradient(rgb(0, 0, 0, 0), rgba(0, 0, 0, 1));
-    background-blend-mode: multiply;
+    background-image: url("gym-background.jpg"), linear-gradient(rgb(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3));
+    background-blend-mode: overlay;
     height: 100%;
     flex-grow: 1;
     background-size: cover;
@@ -8,7 +8,7 @@
 
 .landingMain h1 {
     text-align: center;
-    color: white;
+    color: black;
     align-items: center;
     margin-top: 6rem;
     font-size: 3em;
@@ -16,7 +16,7 @@
 
 .landingMain h3 {
     text-align: center;
-    color: white;
+    color: black;
     align-items: center;
     margin-top: 2rem;
     font-family: Caveat, cursive;
