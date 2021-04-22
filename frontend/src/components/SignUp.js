@@ -1,17 +1,10 @@
 import { useForm } from 'react-hook-form';
 import React, { useContext, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Redirect, Link } from 'react-router-dom';
 import AppContext from '../context/app-context';
 import { signUp } from '../context/actions/auth';
 
 const SignUp = () => {
-  const defaultValues = {
-    username: '',
-    password: '',
-    // confirmPassword: '',
-    email: '',
-  };
   const { dispatch, auth } = useContext(AppContext);
 
   const {
@@ -19,33 +12,7 @@ const SignUp = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ defaultValues });
-
-  const [message, setMessage] = useState();
-
-  // const onSubmit = async (formValues, e) => {
-  //   const newUser = { ...formValues, admin: false };
-
-  //   setMessage({
-  //     data: 'Sign up is in progress...',
-  //     type: 'alert-warning',
-  //   });
-
-  //   try {
-  //     dispatch(signUp(user));
-  //     setMessage({
-  //       data: 'Sign up successfull, redirecting...',
-  //       type: 'alert-success',
-  //     });
-  //   } catch (error) {
-  //     setMessage({
-  //       data: error,
-  //       type: 'alert-danger',
-  //     });
-  //   } finally {
-  //     reset(defaultValues);
-  //   }
-  // };
+  } = useForm({ mode: 'all' });
 
   const onSubmit = (user) => {
     dispatch(signUp(user));
