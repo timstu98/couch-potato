@@ -30,7 +30,15 @@ const Login = () => {
             id='username'
             placeholder='Username'
             {...register('username', {
-              required: 'Username is required.',
+              required: 'Please enter a username',
+              minLength: {
+                value: 6,
+                message: 'Minimum 6 characters are allowed',
+              },
+              maxLength: {
+                value: 255,
+                message: 'Maximum 255 characters are allowed',
+              },
             })}
           />
           {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
@@ -42,7 +50,15 @@ const Login = () => {
             id='password'
             placeholder='Password'
             {...register('password', {
-              required: 'Password is required.',
+              required: 'Please enter a password',
+              minLength: {
+                value: 6,
+                message: 'Minimum 6 characters are allowed',
+              },
+              maxLength: {
+                value: 255,
+                message: 'Maximum 255 characters are allowed',
+              },
             })}
           />
           {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
