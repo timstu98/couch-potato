@@ -22,7 +22,7 @@ const Navbar = () => {
               {!!isAuthenticated ? (
                 <>
                   <li>
-                    <button type='button' onClick={() => dispatch({ type: LOGOUT_SUCCESS })}>
+                    <button id='logOutBtn' type='button' onClick={() => dispatch({ type: LOGOUT_SUCCESS })}>
                       Logout
                     </button>
                   </li>

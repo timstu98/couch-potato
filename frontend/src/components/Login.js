@@ -27,46 +27,50 @@ const Login = () => {
       <fieldset>
         <legend>Login</legend>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <label htmlFor='username'>Username</label>
-            <input
-              id='username'
-              aria-describedby='Enter username'
-              placeholder='Enter username'
-              {...register('username', {
-                required: 'Please enter a username',
-                minLength: {
-                  value: 6,
-                  message: 'Minimum 6 characters are allowed',
-                },
-                maxLength: {
-                  value: 255,
-                  message: 'Maximum 255 characters are allowed',
-                },
-              })}
-            />
+          <div className='formInput'>
+            <div className='formWrapper'>
+              <label htmlFor='username'>Username</label>
+              <input
+                id='username'
+                aria-describedby='Enter username'
+                placeholder='Enter username'
+                {...register('username', {
+                  required: 'Please enter a username',
+                  minLength: {
+                    value: 6,
+                    message: 'Minimum 6 characters are allowed',
+                  },
+                  maxLength: {
+                    value: 255,
+                    message: 'Maximum 255 characters are allowed',
+                  },
+                })}
+              />
+            </div>
             {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
           </div>
 
-          <div>
-            <label htmlFor='password'>Password</label>
-            <input
-              id='password'
-              type='password'
-              aria-describedby='Enter password'
-              placeholder='Password'
-              {...register('password', {
-                required: 'Please enter a password',
-                minLength: {
-                  value: 6,
-                  message: 'Minimum 6 characters are allowed',
-                },
-                maxLength: {
-                  value: 255,
-                  message: 'Maximum 255 characters are allowed',
-                },
-              })}
-            />
+          <div className='formInput'>
+            <div className='formWrapper'>
+              <label htmlFor='password'>Password</label>
+              <input
+                id='password'
+                type='password'
+                aria-describedby='Enter password'
+                placeholder='Password'
+                {...register('password', {
+                  required: 'Please enter a password',
+                  minLength: {
+                    value: 6,
+                    message: 'Minimum 6 characters are allowed',
+                  },
+                  maxLength: {
+                    value: 255,
+                    message: 'Maximum 255 characters are allowed',
+                  },
+                })}
+              />
+            </div>
             {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
           </div>
 
