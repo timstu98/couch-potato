@@ -6,7 +6,7 @@ import AppState from '../context/AppState';
 const PrivateRoute = ({ children, isAuthenticated, ...rest }) => {
   // const state = useContext(AppState);
 
-  return <Route {...rest} render={() => (isAuthenticated ? children : <Redirect to='/login' />)} />;
+  return <Route {...rest} render={() => (isAuthenticated ? children : <Redirect to='/home' />)} />;
 };
 
 PrivateRoute.propTypes = {

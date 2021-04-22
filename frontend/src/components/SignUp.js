@@ -12,7 +12,7 @@ const SignUp = () => {
     // confirmPassword: '',
     email: '',
   };
-  const { dispatch, isAuthenticated } = useContext(AppContext);
+  const { dispatch, auth } = useContext(AppContext);
 
   const {
     register,
@@ -47,7 +47,7 @@ const SignUp = () => {
     }
   };
 
-  return isAuthenticated ? (
+  return auth.isAuthenticated ? (
     <Redirect to='/' />
   ) : (
     <div>

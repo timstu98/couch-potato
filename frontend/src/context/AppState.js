@@ -4,6 +4,7 @@ import useDevThunkReducer from '../utils/useDevThunkReducer';
 import AppContext from './app-context';
 import reducer from './app-reducers';
 import PropTypes from 'prop-types';
+import { combinedReducer, initialCombined } from './reducers/index';
 
 const initialState = {
   accessToken: localStorage.getItem('accessToken'),
@@ -14,15 +15,13 @@ const initialState = {
 
 const AppState = (props) => {
   // const [state, dispatch] = useThunkReducer(reducer, initialState);
-  const [state, dispatch] = useDevThunkReducer(reducer, initialState, 'main');
+  // const [state, dispatch] = useDevThunkReducer(reducer, initialState, 'auth');
+  const [state, dispatch] = useDevThunkReducer(combinedReducer, initialCombined, 'main');
 
-  const { accessToken, isAuthenticated, isLoading, user } = state;
+  // const { accessToken, isAuthenticated, isLoading, user } = state;
+  const { auth } = state;
 
-  return (
-    <AppContext.Provider value={{ accessToken, isAuthenticated, isLoading, user, dispatch }}>
-      {props.children}
-    </AppContext.Provider>
-  );
+  return <AppContext.Provider value={{ auth, dispatch }}>{props.children}</AppContext.Provider>;
 };
 
 AppState.propTypes = {

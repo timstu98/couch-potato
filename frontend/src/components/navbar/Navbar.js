@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import './navbar.css';
 import { NavLink, Link } from 'react-router-dom';
-import { logout } from '../../context/app-actions';
+import { logout } from '../../context/actions/auth';
 import AppContext from '../../context/app-context';
-import { LOGOUT_SUCCESS } from '../../context/app-types';
+import { LOGOUT_SUCCESS } from '../../context/actions/types';
 
 const Navbar = () => {
-  const { dispatch, isAuthenticated } = useContext(AppContext);
+  const { auth, dispatch } = useContext(AppContext);
+  const { isAuthenticated } = auth;
 
   return (
     <div className='navBar'>

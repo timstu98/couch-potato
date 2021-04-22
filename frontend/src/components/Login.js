@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { login } from '../context/app-actions';
+import { login } from '../context/actions/auth';
 import AppContext from '../context/app-context';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
-  const { dispatch, isAuthenticated } = useContext(AppContext);
+  const { dispatch, auth } = useContext(AppContext);
 
   const {
     register,
@@ -20,7 +20,7 @@ const Login = () => {
     reset();
   };
 
-  return isAuthenticated ? (
+  return auth.isAuthenticated ? (
     <Redirect to='/' />
   ) : (
     <div>

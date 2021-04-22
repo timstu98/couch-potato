@@ -3,31 +3,30 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Login from './Login';
 import SignUp from './SignUp';
 import AppContext from '../context/app-context';
-import { loadUser } from '../context/app-actions';
+import { loadUser } from '../context/actions/auth';
 import PrivateRoute from './PrivateRoute';
 import NavBar from './navbar/Navbar';
 import Footer from './footer/Footer';
 import LandingContent from './landingcontent/LandingContent';
 import GenWorkout from './genworkout/GenWorkout';
+import AuthenticatedRoutes from './AuthenticatedRoutes';
 
 const WorkoutGenerator = () => {
-  const { user, isAuthenticated, isLoading, dispatch } = useContext(AppContext);
+  const { auth, dispatch } = useContext(AppContext);
   useEffect(() => {
     dispatch(loadUser());
   }, []);
-
-  const auth = { user, isAuthenticated, isLoading };
 
   return (
     <Router>
       <NavBar />
       <div className='landingMain'>
         <Switch>
-          <Route path='/' exact component={LandingContent} />
+          <Route path='/home' exact component={LandingContent} />
           <Route path='/login' exact component={Login} />
           <Route path='/signup' exact component={SignUp} />
-          <PrivateRoute path='/' isAuthenticated={isAuthenticated}>
-            <GenWorkout />
+          <PrivateRoute path='/' isAuthenticated={auth.isAuthenticated}>
+            <AuthenticatedRoutes />
           </PrivateRoute>
         </Switch>
       </div>
