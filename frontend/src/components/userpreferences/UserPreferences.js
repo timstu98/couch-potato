@@ -19,11 +19,11 @@ const UserPreferences = () => {
   };
 
   return (
-    <div>
+    <div className='genWorkoutForm'>
       <fieldset>
         <legend>Update Workout Preferences</legend>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div>
+          <div className='formInput formWrapper'>
             <label htmlFor='musclegroup'>Muscle Group</label>
             <select id='musclegroup' {...register('musclegroup')}>
               <option value='upperbody'>Upper Body</option>
@@ -32,7 +32,7 @@ const UserPreferences = () => {
             </select>
           </div>
 
-          <div>
+          <div className='formInput formWrapper'>
             <label htmlFor='difficulty'>Difficulty</label>
             <select id='difficulty' {...register('difficulty')}>
               <option value='beginner'>Beginner</option>
@@ -41,7 +41,7 @@ const UserPreferences = () => {
             </select>
           </div>
 
-          <div>
+          <div className='formInput formWrapper'>
             <label htmlFor='type'>Type</label>
             <select id='type' {...register('type')}>
               <option value='strength'>Strength</option>
@@ -49,7 +49,7 @@ const UserPreferences = () => {
             </select>
           </div>
 
-          <div>
+          <div className='formInput formWrapper'>
             <input
               id='time'
               placeholder='Enter workout length (minutes)'

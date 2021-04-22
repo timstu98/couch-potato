@@ -23,28 +23,33 @@ const SignUp = () => {
 
   const [message, setMessage] = useState();
 
-  const onSubmit = async (formValues, e) => {
-    const newUser = { ...formValues, admin: false };
+  // const onSubmit = async (formValues, e) => {
+  //   const newUser = { ...formValues, admin: false };
 
-    setMessage({
-      data: 'Sign up is in progress...',
-      type: 'alert-warning',
-    });
+  //   setMessage({
+  //     data: 'Sign up is in progress...',
+  //     type: 'alert-warning',
+  //   });
 
-    try {
-      dispatch(signUp(user));
-      setMessage({
-        data: 'Sign up successfull, redirecting...',
-        type: 'alert-success',
-      });
-    } catch (error) {
-      setMessage({
-        data: error,
-        type: 'alert-danger',
-      });
-    } finally {
-      reset(defaultValues);
-    }
+  //   try {
+  //     dispatch(signUp(user));
+  //     setMessage({
+  //       data: 'Sign up successfull, redirecting...',
+  //       type: 'alert-success',
+  //     });
+  //   } catch (error) {
+  //     setMessage({
+  //       data: error,
+  //       type: 'alert-danger',
+  //     });
+  //   } finally {
+  //     reset(defaultValues);
+  //   }
+  // };
+
+  const onSubmit = (user) => {
+    dispatch(signUp(user));
+    reset();
   };
 
   return auth.isAuthenticated ? (
@@ -88,8 +93,8 @@ const SignUp = () => {
                 {...register('password', {
                   required: 'Please enter a password',
                   minLength: {
-                    value: 6,
-                    message: 'Minimum 6 characters are allowed',
+                    value: 8,
+                    message: 'Minimum 8 characters are allowed',
                   },
                   maxLength: {
                     value: 255,

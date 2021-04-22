@@ -64,6 +64,7 @@ export const login = ({ username, password }) => (dispatch) => {
 
 // signUp User
 export const signUp = ({ username, email, password }) => (dispatch) => {
+  const admin = false;
   // Headers
   const config = {
     headers: {
@@ -72,7 +73,7 @@ export const signUp = ({ username, email, password }) => (dispatch) => {
   };
 
   // Request Body
-  const body = JSON.stringify({ username, email, password });
+  const body = JSON.stringify({ username, email, password, admin });
 
   axios
     .post('/signup', body, config)
