@@ -8,8 +8,12 @@ const LandingPage = () => {
     <div>
       <NavBar />
       <h1>Are you ready for something more?</h1>
-      <Link to='/login'>Login</Link>
-      <Link to='/signup'>Sign Up</Link>
+      <Link to='/login'>
+        <button type='button'>Login</button>
+      </Link>
+      <Link to='/signup'>
+        <button type='button'>Sign Up</button>
+      </Link>
       <Footer />
     </div>
   );

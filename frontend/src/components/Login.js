@@ -39,6 +39,7 @@ const Login = ({ onLogin }) => {
           <label htmlFor='password'>Password</label>
           <input
             id='password'
+            type='password'
             placeholder='Password'
             {...register('password', {
               required: 'Password is required.',

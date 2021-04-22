@@ -19,27 +19,21 @@ const WorkoutGenerator = () => {
     console.log(data);
   };
 
-  // Sign Up
-  const signUp = async (newUser) => {
-    const res = await fetch('/signup', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify(newUser),
-    });
-
-    const data = await res.json();
-    console.log(data);
-  };
-
   return (
     <Router>
       <div>
         <Switch>
-          <Route path='/' exact render={(props) => <LandingPage />} />
-          <Route path='/login' exact render={(props) => <Login onLogin={login} />} />
-          <Route path='/signup' exact render={(props) => <SignUp onSignUp={signUp} />} />
+          <Route exact path='/'>
+            <LandingPage />
+          </Route>
+
+          <Route path='/login'>
+            <Login onLogin={login} />
+          </Route>
+
+          <Route path='/signup'>
+            <SignUp />
+          </Route>
         </Switch>
       </div>
     </Router>
