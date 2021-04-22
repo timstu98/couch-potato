@@ -1,12 +1,17 @@
-import { useForm } from 'react-hook-form';
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
+import { login } from '../context/app-actions';
+import AppContext from '../context/app-context';
+import { Redirect } from 'react-router';
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const defaultValues = {
     username: '',
     password: '',
   };
+
+  const { dispatch, isAuthenticated } = useContext(AppContext);
 
   const {
     register,
@@ -16,11 +21,13 @@ const Login = ({ onLogin }) => {
   } = useForm({ defaultValues });
 
   const onSubmit = (user) => {
-    onLogin(user);
+    dispatch(login(user));
     reset(defaultValues);
   };
 
-  return (
+  return isAuthenticated ? (
+    <Redirect to='/' />
+  ) : (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
@@ -51,10 +58,6 @@ const Login = ({ onLogin }) => {
       </form>
     </div>
   );
-};
-
-Login.propTypes = {
-  onLogin: PropTypes.func,
 };
 
 export default Login;

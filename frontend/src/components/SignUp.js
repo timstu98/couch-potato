@@ -1,6 +1,10 @@
 import { useForm } from 'react-hook-form';
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router';
+import AppState from '../context/AppState';
+import AppContext from '../context/app-context';
+import { login, signUp } from '../context/app-actions';
 
 const SignUp = ({ onSignUp }) => {
   const defaultValues = {
@@ -9,6 +13,7 @@ const SignUp = ({ onSignUp }) => {
     // confirmPassword: '',
     email: '',
   };
+  const { dispatch, isAuthenticated } = useContext(AppContext);
 
   const {
     register,
@@ -21,11 +26,14 @@ const SignUp = ({ onSignUp }) => {
     const admin = false;
     const user = { ...newUser, admin };
     console.log(user);
-    onSignUp(user);
+    // onSignUp(user);
+    dispatch(signUp(user));
     reset(defaultValues);
   };
 
-  return (
+  return isAuthenticated ? (
+    <Redirect to='/' />
+  ) : (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>

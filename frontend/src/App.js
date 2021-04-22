@@ -1,12 +1,15 @@
 import React from 'react';
 import WorkoutGenerator from './components/WorkoutGenerator';
+import AppState from './context/AppState';
 import './App.css';
 
 function App() {
   return (
-    <div className='App'>
-      <WorkoutGenerator />
-    </div>
+    <AppState>
+      <div className='App'>
+        <WorkoutGenerator />
+      </div>
+    </AppState>
   );
 }
 
