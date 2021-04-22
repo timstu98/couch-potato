@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { login } from '../context/app-actions';
 import AppContext from '../context/app-context';
 import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 import Navbar from './navbar/Navbar';
 import Footer from './footer/Footer';
 
@@ -33,7 +34,8 @@ const Login = () => {
             <label htmlFor='username'>Username</label>
             <input
               id='username'
-              placeholder='Username'
+              aria-describedby='Enter username'
+              placeholder='Enter username'
               {...register('username', {
                 required: 'Please enter a username',
                 minLength: {
@@ -53,6 +55,8 @@ const Login = () => {
             <label htmlFor='password'>Password</label>
             <input
               id='password'
+              type='password'
+              aria-describedby='Enter password'
               placeholder='Password'
               {...register('password', {
                 required: 'Please enter a password',
@@ -69,7 +73,10 @@ const Login = () => {
             {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
           </div>
 
-          <input type='submit' value='Login' />
+          <button type='submit'>Login</button>
+          <button>
+            <Link to='/signup'>Sign Up</Link>
+          </button>
         </form>
       </fieldset>
       <Footer />
