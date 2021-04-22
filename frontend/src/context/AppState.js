@@ -15,9 +15,9 @@ const initialState = {
 const AppState = (props) => {
   const [state, dispatch] = useDevThunkReducer(combinedReducer, initialCombined, 'main');
 
-  const { auth } = state;
+  const { auth, messages, errors } = state;
 
-  return <AppContext.Provider value={{ auth, dispatch }}>{props.children}</AppContext.Provider>;
+  return <AppContext.Provider value={{ auth, messages, errors, dispatch }}>{props.children}</AppContext.Provider>;
 };
 
 AppState.propTypes = {

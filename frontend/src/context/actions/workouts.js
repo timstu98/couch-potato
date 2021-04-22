@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { WORKOUTS_LOADED, WORKOUTS_LOADING, PREFERENCES_CHANGED } from './types';
+import { WORKOUTS_LOADED, WORKOUTS_LOADING, PREFERENCES_CHANGED, AUTH_ERROR, RESET_ERRORS } from './types';
 import { tokenConfig } from '../utils';
+import { returnErrors } from './errors';
 
 // Check token & load workouts
 export const loadWorkouts = (formValues) => (dispatch, getState) => {
@@ -22,10 +23,13 @@ export const loadWorkouts = (formValues) => (dispatch, getState) => {
     })
     .catch((err) => {
       console.log(err);
-      // returnErrors(err.response.data, err.response.status);
-      // dispatch({
-      //   type: AUTH_ERROR,
-      // });
+      returnErrors(err.response.data, err.response.status);
+      dispatch({
+        type: AUTH_ERROR,
+      });
+      dispatch({
+        type: RESET_ERRORS,
+      });
     });
 };
 
@@ -42,9 +46,12 @@ export const changePreferences = (formValues) => (dispatch, getState) => {
     })
     .catch((err) => {
       console.log(err);
-      // returnErrors(err.response.data, err.response.status);
-      // dispatch({
-      //   type: AUTH_ERROR,
-      // });
+      returnErrors(err.response.data, err.response.status);
+      dispatch({
+        type: AUTH_ERROR,
+      });
+      dispatch({
+        type: RESET_ERRORS,
+      });
     });
 };

@@ -8,8 +8,10 @@ import {
   LOGOUT_SUCCESS,
   SIGNUP_SUCCESS,
   SIGNUP_FAILURE,
+  RESET_ERRORS,
 } from './types';
 import { tokenConfig } from '../utils';
+import { returnErrors } from './errors';
 
 // Check token & load user
 export const loadUser = () => (dispatch, getState) => {
@@ -26,10 +28,11 @@ export const loadUser = () => (dispatch, getState) => {
     })
     .catch((err) => {
       console.log(err);
-      // returnErrors(err.response.data, err.response.status);
+      returnErrors(err.response.data, err.response.status);
       dispatch({
         type: AUTH_ERROR,
       });
+      dispatch({ type: RESET_ERRORS });
     });
 };
 
@@ -55,10 +58,11 @@ export const login = ({ username, password }) => (dispatch) => {
     })
     .catch((err) => {
       console.log(err);
-      // dispatch(returnErrors(err.response.data, err.response.status));
+      dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
         type: LOGIN_FAILURE,
       });
+      dispatch({ type: RESET_ERRORS });
     });
 };
 
@@ -85,10 +89,11 @@ export const signUp = ({ username, email, password }) => (dispatch) => {
     })
     .catch((err) => {
       console.log(err);
-      // dispatch(returnErrors(err.response.data, err.response.status));
+      dispatch(returnErrors(err.response.data, err.response.status));
       dispatch({
         type: SIGNUP_FAILURE,
       });
+      dispatch({ type: RESET_ERRORS });
     });
 };
 
@@ -103,6 +108,7 @@ export const logout = () => (dispatch, getState) => {
     })
     .catch((err) => {
       console.log(err);
-      // dispatch(returnErrors(err.response.data, err.response.status));
+      dispatch(returnErrors(err.response.data, err.response.status));
+      dispatch({ type: RESET_ERRORS });
     });
 };
