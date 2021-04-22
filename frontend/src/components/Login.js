@@ -12,7 +12,7 @@ const Login = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({ mode: 'all' });
 
   const onSubmit = (user) => {
     dispatch(login(user));
