@@ -53,7 +53,7 @@ module.exports = function (app) {
       if (verify) {
         console.log(`${user.username} has successfully logged in.`)
         const accessToken = jwt.sign({ id: user._id }, func.JWT_SECRET);
-        res.json({ accessToken });
+        res.json({ user, accessToken });
       } else {
         res.json("Username or password incorrect. Please try again.");
       }
