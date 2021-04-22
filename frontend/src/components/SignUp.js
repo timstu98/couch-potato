@@ -1,12 +1,11 @@
 import { useForm } from 'react-hook-form';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router';
-import AppState from '../context/AppState';
+import { Redirect, Link } from 'react-router-dom';
 import AppContext from '../context/app-context';
-import { login, signUp } from '../context/app-actions';
+import { signUp } from '../context/app-actions';
 
-const SignUp = ({ onSignUp }) => {
+const SignUp = () => {
   const defaultValues = {
     username: '',
     password: '',
@@ -22,76 +21,116 @@ const SignUp = ({ onSignUp }) => {
     formState: { errors },
   } = useForm({ defaultValues });
 
-  const onSubmit = (newUser) => {
-    const admin = false;
-    const user = { ...newUser, admin };
-    console.log(user);
-    // onSignUp(user);
-    dispatch(signUp(user));
-    reset(defaultValues);
+  const [message, setMessage] = useState();
+
+  const onSubmit = async (formValues, e) => {
+    const newUser = { ...formValues, admin: false };
+
+    setMessage({
+      data: 'Sign up is in progress...',
+      type: 'alert-warning',
+    });
+
+    try {
+      dispatch(signUp(user));
+      setMessage({
+        data: 'Sign up successfull, redirecting...',
+        type: 'alert-success',
+      });
+    } catch (error) {
+      setMessage({
+        data: error,
+        type: 'alert-danger',
+      });
+    } finally {
+      reset(defaultValues);
+    }
   };
 
   return isAuthenticated ? (
     <Redirect to='/' />
   ) : (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor='username'>Username</label>
-          <input
-            id='username'
-            placeholder='Username'
-            {...register('username', {
-              required: 'Username is required.',
-            })}
-          />
-          {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
-        </div>
+      <fieldset>
+        <legend>Sign Up</legend>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete='off'>
+          <div>
+            <label htmlFor='username'>Username</label>
+            <input
+              id='username'
+              aria-describedby='Enter a username'
+              placeholder='Enter a username'
+              {...register('username', {
+                required: 'Please enter a username',
+                minLength: {
+                  value: 6,
+                  message: 'Minimum 6 characters are allowed',
+                },
+                maxLength: {
+                  value: 255,
+                  message: 'Maximum 255 characters are allowed',
+                },
+              })}
+            />
+            {errors.username && <span style={{ color: 'red' }}>{errors.username.message}</span>}
+          </div>
 
-        <div>
-          <label htmlFor='password'>Password</label>
-          <input
-            id='password'
-            placeholder='Password'
-            {...register('password', {
-              required: 'Password is required.',
-            })}
-          />
-          {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
-        </div>
+          <div>
+            <label htmlFor='password'>Password</label>
+            <input
+              id='password'
+              type='password'
+              aria-describedby='Enter a password'
+              placeholder='Enter a password'
+              {...register('password', {
+                required: 'Please enter a password',
+                minLength: {
+                  value: 6,
+                  message: 'Minimum 6 characters are allowed',
+                },
+                maxLength: {
+                  value: 255,
+                  message: 'Maximum 255 characters are allowed',
+                },
+              })}
+            />
+            {errors.password && <span style={{ color: 'red' }}>{errors.password.message}</span>}
+          </div>
 
-        {/* <div>
-          <label htmlFor='confirmpassword'>Confirm Password</label>
-          <input
-            id='confirmpassword'
-            placeholder='Confirm Password'
-            {...register('confirmpassword', {
-              required: 'Confirm Password is required.',
-            })}
-          />
-          {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
-        </div> */}
+          <div>
+            <label htmlFor='email'>Email</label>
+            <input
+              id='email'
+              aria-describedby='Enter email address'
+              type='text'
+              placeholder='Enter email address'
+              {...register('email', {
+                required: 'Please enter your email address',
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: 'Enter a valid email address',
+                },
+                minLength: {
+                  value: 6,
+                  message: 'Minimum 6 characters are allowed',
+                },
+                maxLength: {
+                  value: 255,
+                  message: 'Maximum 255 characters are allowed',
+                },
+              })}
+            />
+            {errors.email && <span style={{ color: 'red' }}>{errors.email.message}</span>}
+          </div>
 
-        <div>
-          <label htmlFor='email'>Email</label>
-          <input
-            id='email'
-            placeholder='Email'
-            {...register('email', {
-              required: 'Email is required.',
-            })}
-          />
-          {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
-        </div>
-
-        <input type='submit' value='Login' />
-      </form>
+          <button type='submit'>Sign Up</button>
+          <button>
+            <Link to='/login'>Login</Link>
+          </button>
+        </form>
+      </fieldset>
     </div>
   );
-};
-
-SignUp.propTypes = {
-  onSignUp: PropTypes.func,
 };
 
 export default SignUp;
