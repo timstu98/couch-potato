@@ -2,11 +2,16 @@ import React, { useContext } from 'react';
 import './navbar.css';
 import { NavLink } from 'react-router-dom';
 import AppContext from '../../context/app-context';
-import { LOGOUT_SUCCESS } from '../../context/actions/types';
+import { LOGOUT_SUCCESS, CLEAR_WORKOUTS } from '../../context/actions/types';
 
 const Navbar = () => {
   const { auth, dispatch } = useContext(AppContext);
   const { isAuthenticated } = auth;
+
+  const logoutUser = () => {
+    dispatch({ type: CLEAR_WORKOUTS });
+    dispatch({ type: LOGOUT_SUCCESS });
+  };
 
   return (
     <div className='navBar'>
@@ -25,7 +30,7 @@ const Navbar = () => {
                     <NavLink to='/preferences'>Preferences</NavLink>
                   </li>
                   <li>
-                    <button id='logOutBtn' type='button' onClick={() => dispatch({ type: LOGOUT_SUCCESS })}>
+                    <button id='logOutBtn' type='button' onClick={() => logoutUser()}>
                       Logout
                     </button>
                   </li>
