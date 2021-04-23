@@ -36,8 +36,8 @@ module.exports = function (app) {
       musclegroup = user.preferences.musclegroup;
       type = user.preferences.type;
     } else {
-      res.json(`Please specify time, musclegroup, difficulty and type. 
-      Otherwise, your saved preferences will be used.`);
+      return res.status(400).json(`Please specify time, musclegroup, difficulty and type. 
+      Otherwise, your saved preferences will be used.`)
     }
 
     // Calculate number of exercises
@@ -47,7 +47,7 @@ module.exports = function (app) {
     } else if (type === "tone") {
       numOfEx = time / 3.5; // time taken per exercise (3 sets, 12 reps, 30sec breaks, based on 3 sec per rep)
     } else {
-      res.json("Type of workout not valid. Please enter 'strength' or 'tone'.");
+      return res.status(400).json("Type of workout not valid. Please enter 'strength' or 'tone'.");
     }
 
     // Fetch appropriate exercises from the database

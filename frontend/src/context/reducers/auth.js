@@ -30,7 +30,8 @@ export default function reducer(state, action) {
       localStorage.setItem('accessToken', action.payload.accessToken);
       return {
         ...state,
-        ...action.payload,
+        accessToken: action.payload.accessToken,
+        user: action.payload.user,
         isAuthenticated: true,
         isLoading: false,
       };

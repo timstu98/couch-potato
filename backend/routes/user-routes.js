@@ -23,7 +23,7 @@ module.exports = function (app) {
     // Check if username already exists in the database
     const existingUser = await UsersModel.find({ username });
     if (existingUser.length !== 0) {
-      res.json("Username already exists, please use a new username or login.");
+      res.status(400).send("Username already exists, please use a new username or login.");
     }
 
     let user = new UsersModel({ 
@@ -31,7 +31,7 @@ module.exports = function (app) {
       });
       user.save((err, results) => {
         if (err) {
-          res.json(err);
+          return res.status(400).json(err);
         } else {
           const accessToken = jwt.sign({ id: results._id }, func.JWT_SECRET);
           res.json({ accessToken });
@@ -82,9 +82,7 @@ module.exports = function (app) {
         { new: true },
         (err, result) => {
           if (err) {
-            res.json(
-              "Something went wrong when adding the user's preferences."
-            );
+            return res.status(400).send("Something went wrong when adding the user's preferences.");
           } else {
             console.log(`Preferences have been updated for ${result.username}`)
             res.json(result.preferences);
@@ -109,7 +107,7 @@ module.exports = function (app) {
       id = tokenId;
       func.getUserDetails(id, req, res);
     } else {
-      res.json("You are not authorized to do this.");
+      return res.status(400).send("You are not authorized to do this.");
     }
   });
 
@@ -128,7 +126,7 @@ module.exports = function (app) {
       id = tokenId;
       func.updateUserDetails(id, req, res);
     } else {
-      res.json("You are not authorized to do this.");
+      return res.status(400).send("You are not authorized to do this.");
     }
   });
 
@@ -147,7 +145,7 @@ module.exports = function (app) {
       id = tokenId;
       func.deleteUserDetails(id, req, res);
     } else {
-      res.json("You are not authorized to do this.");
+      return res.status(400).send("You are not authorized to do this.");
     }
   });
 
