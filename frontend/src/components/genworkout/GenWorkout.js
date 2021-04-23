@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import AppContext from '../../context/app-context';
 import { loadWorkouts } from '../../context/actions/workouts';
@@ -67,7 +67,6 @@ const GenWorkout = () => {
             </div>
             {errors.time && <span style={{ color: 'red' }}>{errors.time.message}</span>}
           </div>
-
           <button type='submit'>Generate Workout</button>
         </form>
       </fieldset>

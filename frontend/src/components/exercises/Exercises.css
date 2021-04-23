@@ -1,0 +1,9 @@
+.exercise-list {
+    margin-bottom: 5rem;
+}
+
+.exercise-list h1 {
+    font-family: Caveat, cursive;
+    font-weight: bold;
+    font-size: 3.5rem;
+}
