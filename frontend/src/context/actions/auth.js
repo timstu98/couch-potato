@@ -9,6 +9,7 @@ import {
   SIGNUP_SUCCESS,
   SIGNUP_FAILURE,
   RESET_ERRORS,
+  CLEAR_WORKOUTS,
 } from './types';
 import { tokenConfig } from '../utils';
 import { returnErrors } from './errors';
@@ -105,6 +106,7 @@ export const logout = () => (dispatch, getState) => {
       dispatch({
         type: LOGOUT_SUCCESS,
       });
+      dispatch({ type: CLEAR_WORKOUTS });
     })
     .catch((err) => {
       console.log(err);

@@ -1,4 +1,4 @@
-import { WORKOUTS_LOADED, DELETE_EXERCISE, COMPLETE_EXERCISE } from '../actions/types';
+import { WORKOUTS_LOADED, DELETE_EXERCISE, COMPLETE_EXERCISE, CLEAR_WORKOUTS } from '../actions/types';
 
 export default function reducer(state, action) {
   switch (action.type) {
@@ -31,6 +31,11 @@ export default function reducer(state, action) {
           }
           return exercise;
         }),
+      };
+    case CLEAR_WORKOUTS:
+      return {
+        ...state,
+        workouts: [],
       };
     default:
       return state;
