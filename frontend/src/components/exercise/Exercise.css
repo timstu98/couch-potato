@@ -1,8 +1,9 @@
 .exercise {
     background: #f4f4f4;
-    margin: 20px 5px;
+    margin: 0.5rem 0;
     padding: 10px 20px;
     cursor: pointer;
+    box-sizing: border-box;
 }
 
 .exercise h3 {
