@@ -6,8 +6,6 @@ const Alert = () => {
   const alert = useAlert();
 
   const { messages, errors } = useContext(AppContext);
-  console.log(messages);
-  console.log(errors);
 
   useEffect(() => {
     if (errors.msg) {

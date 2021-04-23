@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import './Exercise.css';
 import { FaTimes, FaCheck } from 'react-icons/fa';
+import AppContext from '../../context/app-context';
+import { DELETE_EXERCISE, COMPLETE_EXERCISE } from '../../context/actions/types';
 
-const Exercise = ({ exercise, onComplete, onDelete }) => {
+const Exercise = ({ exercise }) => {
+  const { dispatch } = useContext(AppContext);
+
+  const onComplete = (id) => {
+    dispatch({ type: COMPLETE_EXERCISE, payload: id });
+  };
+  const onDelete = (id) => {
+    dispatch({ type: DELETE_EXERCISE, payload: id });
+  };
+
   return (
     <div className={`exercise ${exercise.completed ? 'completed completed-text' : ''}`}>
       <h3>
@@ -21,8 +32,6 @@ const Exercise = ({ exercise, onComplete, onDelete }) => {
 
 Exercise.propTypes = {
   exercise: PropTypes.object,
-  onComplete: PropTypes.func,
-  onDelete: PropTypes.func,
 };
 
 export default Exercise;
